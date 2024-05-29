@@ -1,5 +1,6 @@
 package Usuario;
 
+import Medico.Medico;
 import Modelo.Admin;
 
 public class UAdmin extends Usuario{

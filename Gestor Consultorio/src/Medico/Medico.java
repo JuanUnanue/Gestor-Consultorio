@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class Medico extends Persona {
     private int matricula;
     private Especialidad especialidad;
+    private Agenda agenda;
     private boolean pagoAlquiler;
     //
     public Medico() {
@@ -18,6 +19,7 @@ public class Medico extends Persona {
         this.matricula = matricula;
         this.especialidad = especialidad;
         this.pagoAlquiler = pagoAlquiler;
+        this.agenda=new Agenda();
     }
     public int getMatricula() {
         return matricula;

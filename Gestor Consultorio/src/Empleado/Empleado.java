@@ -1,8 +1,11 @@
-package Modelo;
+package Empleado;
+
+import Modelo.Direccion;
+import Modelo.Persona;
 
 import java.time.LocalDate;
 
-public class Empleado extends Persona{
+public class Empleado extends Persona {
     private int cantHsPorDia;
     private int precioHora;
     //

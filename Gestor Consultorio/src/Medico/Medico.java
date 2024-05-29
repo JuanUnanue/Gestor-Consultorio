@@ -1,8 +1,12 @@
-package Modelo;
+package Medico;
+
+import Modelo.Direccion;
+import Modelo.Especialidad;
+import Modelo.Persona;
 
 import java.time.LocalDate;
 
-public class Medico extends Persona{
+public class Medico extends Persona {
     private int matricula;
     private Especialidad especialidad;
     private boolean pagoAlquiler;

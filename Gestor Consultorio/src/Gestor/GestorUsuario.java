@@ -89,5 +89,15 @@ public class GestorUsuario {
 
         }
     }
-
+    public Usuario buscarUsuario(String user, String contraseña){
+        Iterator<Usuario>iterator=usuarios.iterator();
+        Usuario rta=null;
+        while (iterator.hasNext()){
+            Usuario aux= iterator.next();
+            if(aux.getUsername().equals(user) && aux.getContraseña().equals(contraseña)){
+                rta=aux;
+            }
+        }
+        return rta;
+    }
 }

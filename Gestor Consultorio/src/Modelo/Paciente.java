@@ -3,32 +3,23 @@ package Modelo;
 import java.time.LocalDate;
 
 public class Paciente extends Persona{
-    private int historiaClinica;
-    private String antecedentes;
+    private String historiaClinica;
     //
     public Paciente() {
     }
-    public Paciente(String nombre, String apellido, LocalDate fechaNacimiento, int dni, Direccion direccion, int historiaClinica, String antecedentes) {
+    public Paciente(String nombre, String apellido, LocalDate fechaNacimiento, int dni, Direccion direccion, String historiaClinica) {
         super(nombre, apellido, fechaNacimiento, dni, direccion);
         this.historiaClinica = historiaClinica;
-        this.antecedentes = antecedentes;
     }
 
-    public int getHistoriaClinica() {
+    public String getHistoriaClinica() {
         return historiaClinica;
     }
 
-    public String getAntecedentes() {
-        return antecedentes;
-    }
-    public void setAntecedentes(String antecedentes) {
-        this.antecedentes = antecedentes;
-    }
     @Override
     public String toString() {
         return "Paciente{" +
                 "historiaClinica=" + historiaClinica +
-                ", antecedentes='" + antecedentes + '\'' +
                 '}';
     }
 }

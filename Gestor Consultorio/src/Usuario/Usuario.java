@@ -9,11 +9,12 @@ public class Usuario implements Serializable {
     private int id;
     private String username;
     private String contraseña;
+    private boolean activo;
     //
-    public Usuario(int id, String username, String contraseña) {
-        this.id = id;
+    public Usuario(String username, String contraseña) {
         this.username = username;
         this.contraseña = contraseña;
+        this.activo=false;
     }
 
     public int getId() {

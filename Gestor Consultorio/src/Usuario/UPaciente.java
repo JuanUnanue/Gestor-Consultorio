@@ -6,7 +6,7 @@ public class UPaciente extends Usuario{
     private Paciente paciente;
     //
     public UPaciente(int id, String username, String contraseña, Paciente paciente) {
-        super(id, username, contraseña);
+        super(username, contraseña);
         this.paciente = paciente;
     }
     public Paciente getPaciente() {

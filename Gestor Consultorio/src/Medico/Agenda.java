@@ -4,6 +4,8 @@ import Gestor.IGestorTurno;
 import Modelo.Turno;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,34 +25,10 @@ public class Agenda implements IGestorTurno {
         this.turnos = turnos;
     }
 
-    /*
-            public HashSet<DayOfWeek> getDiasLaborables() {
-                return diasLaborables;
-            }
-
-            public void setDiasLaborables(HashSet<DayOfWeek> diasLaborables) {
-                this.diasLaborables = diasLaborables;
-            }
-
-            public LocalTime getHoraInicio() {
-                return horaInicio;
-            }
-
-            public void setHoraInicio(LocalTime horaInicio) {
-                this.horaInicio = horaInicio;
-            }
-
-            public LocalTime getHoraFinal() {
-                return horaFinal;
-            }
-
-            public void setHoraFinal(LocalTime horaFinal) {
-                this.horaFinal = horaFinal;
-            }*/
     @Override
     public String toString() {
         return "AgendaMedico{" +
-                ", turnos=" + turnos
+                ", turnos=" + turnos + "\n"
             /*    ", diasLaborables=" + diasLaborables +
                 ", horaInicio=" + horaInicio +
                 ", horaFinal=" + horaFinal +
@@ -63,14 +41,27 @@ public class Agenda implements IGestorTurno {
         }
     }
     @Override
-    public void inicializarTurnosDisponibles(LocalTime fechaHora,DayOfWeek diaSemana) {
-        ArrayList<Turno> turnosDispo=new ArrayList<>();
+    public void inicializarTurnosDisponibles(DayOfWeek diaSemana,LocalDateTime diaInicio, LocalTime horaInicio, LocalTime horaFinal) {
+        ArrayList<Turno> turnosDispo;
+        LocalDateTime fechaActual=diaInicio;
+        LocalDateTime fechaFin=fechaActual.plusMonths(3);//Cada vez que se generan turnos disponibles, se hace desde una fecha especifica hasta 3 meses depsues, a pedido del cliente
         if(turnos.containsKey(diaSemana)){
             turnosDispo=turnos.get(diaSemana);
+            turnosDispo.clear();
         }else{
-            tu
+           turnosDispo=new ArrayList<>();
+           turnos.put(diaSemana,turnosDispo);
+        }
+        while(fechaActual.isBefore(fechaFin)){
+            if(fechaActual.getDayOfWeek()==diaSemana){
+                LocalDateTime horaActual=fechaActual.with(horaInicio);
+                LocalDateTime limiteHora=fechaActual.with(horaFinal);
+                while(horaActual.isBefore(limiteHora)){
+                    turnosDispo.add(new Turno(horaActual));
+                    horaActual=horaActual.plusMinutes(15);
+                }
+            }
+            fechaActual=fechaActual.plusDays(1);
         }
     }
-
-
 }

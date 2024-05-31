@@ -1,5 +1,6 @@
 package Menu;
 
+import Paciente.GestorPaciente;
 import Usuario.GestorUsuario;
 import Usuario.Usuario;
 
@@ -16,6 +17,8 @@ public class Menu {
         int opc;
         GestorUsuario usuarios=new GestorUsuario();
         usuarios.leerUsuarios();
+        GestorPaciente pacientes=new GestorPaciente();
+        pacientes.leerPaciente();
         do {
             System.out.println(menu);
 
@@ -28,7 +31,7 @@ public class Menu {
                     Usuario user=inicioSesion(usuarios);
                     if(user instanceof Usuario){
                         MenuAdmin aux=new MenuAdmin();
-                        aux.menuPrincipal(usuarios);
+                        aux.menuPrincipal(usuarios,pacientes);
                     }
                     break;
                 case 2:
@@ -42,6 +45,7 @@ public class Menu {
             }
         } while (opc != 0);
         usuarios.guardarUsuarios();
+        pacientes.leerPaciente();
         scanner.close();
     }
     public Usuario inicioSesion(GestorUsuario usuarios) {

@@ -1,5 +1,6 @@
 package Menu;
 
+import Paciente.GestorPaciente;
 import Usuario.GestorUsuario;
 import Usuario.Usuario;
 
@@ -12,7 +13,7 @@ public class MenuAdmin {
         this.scanner = new Scanner(System.in);
     }
 
-    public void menuPrincipal(GestorUsuario usuarios) {
+    public void menuPrincipal(GestorUsuario usuarios, GestorPaciente pacientes) {
 
         String menu = "\n \t1- Crear Paciente\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t0- Finalizar Programa\n";
         int opc;
@@ -26,7 +27,7 @@ public class MenuAdmin {
                     System.out.println("Saliendo del programa");
                     break;
                 case 1:
-
+                    pacientes.crearPaciente();
                     break;
                 case 2:
                     usuarios.crearUsuario();
@@ -38,7 +39,6 @@ public class MenuAdmin {
                     System.out.println("Ingrese una opcion valida");
             }
         } while (opc != 0);
-        usuarios.guardarUsuarios();
         scanner.close();
     }
 }

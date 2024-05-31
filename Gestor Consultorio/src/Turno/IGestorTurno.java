@@ -1,4 +1,4 @@
-package Gestor;
+package Turno;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

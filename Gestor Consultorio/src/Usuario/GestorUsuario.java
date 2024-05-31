@@ -1,25 +1,23 @@
-package Gestor;
-
-import Usuario.Usuario;
+package Usuario;
 
 import java.io.*;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class GestorUsuario {
-    private HashSet<Usuario> usuarios;
+    private HashSet<Usuario> listadoUsuarios;
+    private Scanner scanner;
     //
     public GestorUsuario() {
-        usuarios = new HashSet<>();
+        listadoUsuarios = new HashSet<>();
+        scanner=new Scanner(System.in);
     }
-    public HashSet<Usuario> getUsuarios() {
-        return usuarios;
-    }
-    public void agregarUsuario(Usuario user){
-        usuarios.add(user);
+    public HashSet<Usuario> getListadoUsuarios() {
+        return listadoUsuarios;
     }
     public void mostrarUsuarios(){
-        Iterator<Usuario>iterator=usuarios.iterator();
+        Iterator<Usuario>iterator= listadoUsuarios.iterator();
         while (iterator.hasNext()){
             Usuario aux=iterator.next();
             System.out.println(aux.toString());
@@ -35,7 +33,7 @@ public class GestorUsuario {
             while (true) {
                 try {
                     aux = (Usuario) objectInputStream.readObject();
-                    usuarios.add(aux);
+                    listadoUsuarios.add(aux);
                 } catch (EOFException ex) {
                     break;
                 }
@@ -58,7 +56,7 @@ public class GestorUsuario {
     }
     public void guardarUsuarios(){
         ObjectOutputStream objectOutputStream=null;
-        Iterator<Usuario> usuarioIterator = usuarios.iterator();
+        Iterator<Usuario> usuarioIterator = listadoUsuarios.iterator();
         try{
             FileOutputStream fileOutputStream=new FileOutputStream("Usuarios.bin");
             objectOutputStream = new ObjectOutputStream(fileOutputStream);
@@ -90,7 +88,7 @@ public class GestorUsuario {
         }
     }
     public Usuario buscarUsuario(String user, String contraseña){
-        Iterator<Usuario>iterator=usuarios.iterator();
+        Iterator<Usuario>iterator= listadoUsuarios.iterator();
         Usuario rta=null;
         while (iterator.hasNext()){
             Usuario aux= iterator.next();
@@ -99,5 +97,34 @@ public class GestorUsuario {
             }
         }
         return rta;
+    }
+    public boolean buscarUserName(String user) //Devuele true si existe usuario en el sistema
+    {
+        Iterator<Usuario>iterator= listadoUsuarios.iterator();
+        boolean rta=false;
+        while (iterator.hasNext()){
+            Usuario aux=iterator.next();
+            if(aux.getUsername().equals(user)){
+                rta=true;
+            }
+        }
+        return rta;
+    }
+    public void crearUsuario(){
+        boolean flag=true;
+        String user="";
+        while (flag){
+            System.out.println("Ingrese userName: ");
+            user=scanner.next();
+            boolean rta=buscarUserName(user);
+            if (!rta){
+                flag=false;
+            }else {
+                System.out.println("Ese userName ya existe. Intente nuevamente");
+            }
+        }
+        System.out.println("Ingrese contraseña: ");
+        String contraseña=scanner.next();
+        listadoUsuarios.add(new Usuario(user,contraseña));
     }
 }

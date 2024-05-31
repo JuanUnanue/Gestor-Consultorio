@@ -1,8 +1,11 @@
-package Modelo;
+package Paciente;
+
+import Modelo.Direccion;
+import Modelo.Persona;
 
 import java.time.LocalDate;
 
-public class Paciente extends Persona{
+public class Paciente extends Persona {
     private String historiaClinica;
     //
     public Paciente() {

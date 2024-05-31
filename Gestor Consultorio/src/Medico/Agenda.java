@@ -1,10 +1,9 @@
 package Medico;
 
-import Gestor.IGestorTurno;
-import Modelo.Turno;
+import Turno.IGestorTurno;
+import Turno.Turno;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;

@@ -1,9 +1,8 @@
 package Menu;
 
-import Gestor.GestorUsuario;
+import Usuario.GestorUsuario;
 import Usuario.Usuario;
 
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class Menu {
@@ -13,7 +12,7 @@ public class Menu {
     }
     public void menuPrincipal() {
 
-        String menu = "\n \t1- Iniciar Sesion\n\t2- Mostrar Usuarios\n\t0- Finalizar Programa\n";
+        String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t0- Finalizar Programa\n";
         int opc;
         GestorUsuario usuarios=new GestorUsuario();
         usuarios.leerUsuarios();
@@ -27,17 +26,23 @@ public class Menu {
                     break;
                 case 1:
                     Usuario user=inicioSesion(usuarios);
-                    if(user instanceof Usuario)
+                    if(user instanceof Usuario){
+                        MenuAdmin aux=new MenuAdmin();
+                        aux.menuPrincipal(usuarios);
+                    }
                     break;
                 case 2:
-                    GestorUsuario aux=new GestorUsuario();
-                    aux.leerUsuarios();
-                    aux.mostrarUsuarios();
+                    usuarios.crearUsuario();
+                    break;
+                case 3:
+                    usuarios.mostrarUsuarios();
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");
             }
         } while (opc != 0);
+        usuarios.guardarUsuarios();
+        scanner.close();
     }
     public Usuario inicioSesion(GestorUsuario usuarios) {
         System.out.println("Ingrese usuario: ");

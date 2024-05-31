@@ -1,6 +1,6 @@
 package Usuario;
 
-import Modelo.Paciente;
+import Paciente.Paciente;
 
 public class UPaciente extends Usuario{
     private Paciente paciente;

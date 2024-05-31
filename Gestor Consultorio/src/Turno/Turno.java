@@ -1,10 +1,9 @@
-package Modelo;
+package Turno;
 
 import Medico.Medico;
+import Paciente.Paciente;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Turno {
     private Paciente paciente;

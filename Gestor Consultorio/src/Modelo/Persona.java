@@ -1,9 +1,10 @@
 package Modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class Persona {
+public class Persona implements Serializable {
     private String nombre;
     private String apellido;
     private LocalDate fechaNacimiento;

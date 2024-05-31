@@ -7,11 +7,9 @@ import java.util.Scanner;
 
 public class GestorUsuario {
     private HashSet<Usuario> listadoUsuarios;
-    private Scanner scanner;
     //
     public GestorUsuario() {
         listadoUsuarios = new HashSet<>();
-        scanner=new Scanner(System.in);
     }
     public HashSet<Usuario> getListadoUsuarios() {
         return listadoUsuarios;
@@ -22,6 +20,10 @@ public class GestorUsuario {
             Usuario aux=iterator.next();
             System.out.println(aux.toString());
         }
+    }
+    public String agregarUsuario(Usuario user){
+        listadoUsuarios.add(user);
+        return "Se creo el usuario correctamente!";
     }
     //
     public void leerUsuarios() { //Trae del archivo los usaurios a un HashSet
@@ -110,21 +112,5 @@ public class GestorUsuario {
         }
         return rta;
     }
-    public void crearUsuario(){
-        boolean flag=true;
-        String user="";
-        while (flag){
-            System.out.println("Ingrese userName: ");
-            user=scanner.next();
-            boolean rta=buscarUserName(user);
-            if (!rta){
-                flag=false;
-            }else {
-                System.out.println("Ese userName ya existe. Intente nuevamente");
-            }
-        }
-        System.out.println("Ingrese contraseña: ");
-        String contraseña=scanner.next();
-        listadoUsuarios.add(new Usuario(user,contraseña));
-    }
+
 }

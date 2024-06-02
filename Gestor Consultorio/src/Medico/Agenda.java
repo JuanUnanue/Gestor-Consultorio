@@ -16,6 +16,10 @@ public class Agenda implements IGestorTurno {
         this.turnos=new HashMap<>();
     }
 
+    public Agenda(HashMap<DayOfWeek, ArrayList<Turno>> turnos) {
+        this.turnos = turnos;
+    }
+
     public HashMap<DayOfWeek, ArrayList<Turno>> getTurnos() {
         return turnos;
     }
@@ -40,7 +44,7 @@ public class Agenda implements IGestorTurno {
         }
     }
     @Override
-    public void inicializarTurnosDisponibles(DayOfWeek diaSemana,LocalDateTime diaInicio, LocalTime horaInicio, LocalTime horaFinal) {
+    public void inicializarTurnosDisponibles(DayOfWeek diaSemana,LocalDateTime diaInicio, LocalTime horaInicio, LocalTime horaFinal,int matricula) {
         ArrayList<Turno> turnosDispo;
         LocalDateTime fechaActual=diaInicio;
         LocalDateTime fechaFin=fechaActual.plusMonths(3);//Cada vez que se generan turnos disponibles, se hace desde una fecha especifica hasta 3 meses depsues, a pedido del cliente
@@ -56,7 +60,7 @@ public class Agenda implements IGestorTurno {
                 LocalDateTime horaActual=fechaActual.with(horaInicio);
                 LocalDateTime limiteHora=fechaActual.with(horaFinal);
                 while(horaActual.isBefore(limiteHora)){
-                    turnosDispo.add(new Turno(horaActual));
+                    turnosDispo.add(new Turno(horaActual,matricula,true));
                     horaActual=horaActual.plusMinutes(15);
                 }
             }

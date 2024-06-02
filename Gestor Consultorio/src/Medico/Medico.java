@@ -42,13 +42,13 @@ public class Medico extends Persona implements Serializable {
         this.especialidad = especialidad;
     }
 
-    protected void setAgenda(Agenda agenda) {
+    public void setAgenda(Agenda agenda) {
         this.agenda = agenda;
     }
 
     @Override
     public String toString() {
-        return "Medico{" +
+        return "Medico{" + super.toString()+
                 "matricula=" + matricula +
                 ", especialidad=" + especialidad +
                 '}';

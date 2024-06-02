@@ -13,9 +13,21 @@ public class Turno {
     //
 
 
-    public Turno(LocalDateTime fechaHora ){
+    public Turno() {
+    }
+
+    public Turno(int dniPaciente, int matriculaMedico, LocalDateTime fechaHora, boolean disponible) {
+        this.dniPaciente = dniPaciente;
+        this.matriculaMedico = matriculaMedico;
         this.fechaHora = fechaHora;
+        this.disponible = disponible;
+    }
+
+    public Turno(LocalDateTime fechaHora, int matriculaMedico,boolean disponible){
+        this.fechaHora = fechaHora;
+        this.matriculaMedico=matriculaMedico;
         disponible=true;
+        dniPaciente=0;
     }
 
     public Turno(LocalDateTime fechaHora, int matriculaMedico, int dniPaciente) {

@@ -6,8 +6,8 @@ import Paciente.Paciente;
 import java.time.LocalDateTime;
 
 public class Turno {
-    private Paciente paciente;
-    private Medico medico;
+    private int dniPaciente;
+    private int matriculaMedico;
     private LocalDateTime fechaHora;
     private boolean disponible;
     //
@@ -18,11 +18,43 @@ public class Turno {
         disponible=true;
     }
 
-    public Turno(LocalDateTime fechaHora, Medico medico, Paciente paciente) {
+    public Turno(LocalDateTime fechaHora, int matriculaMedico, int dniPaciente) {
         this.disponible = true;
         this.fechaHora = fechaHora;
-        this.medico = medico;
-        this.paciente = paciente;
+        this.matriculaMedico=matriculaMedico;
+        this.dniPaciente=dniPaciente;
+    }
+
+    public int getPaciente() {
+        return dniPaciente;
+    }
+
+    public void setPaciente(int paciente) {
+        this.dniPaciente = paciente;
+    }
+
+    public int getMatriculaMedico() {
+        return matriculaMedico;
+    }
+
+    public void setMatriculaMedico(int matriculaMedico) {
+        this.matriculaMedico = matriculaMedico;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 
     @Override

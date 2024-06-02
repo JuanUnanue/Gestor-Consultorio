@@ -1,15 +1,18 @@
 package Medico;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class JsonMedicos {
-    public void grabar(JSONArray jsonArray,String archivo){
+    public static void grabar(JSONObject jsonObject, String archivo){
         try {
             FileWriter file = new FileWriter(archivo+".json");
-            file.write(jsonArray.toString());
+            file.write(jsonObject.toString());
             file.flush();
             file.close();
 
@@ -17,7 +20,17 @@ public class JsonMedicos {
             e.printStackTrace();
         }
     }
-    public void leer(){
-
+    public static String leer(String archivo)
+    {
+        String contenido = "";
+        try
+        {
+            contenido = new String(Files.readAllBytes(Paths.get(archivo+".json")));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return contenido;
     }
 }

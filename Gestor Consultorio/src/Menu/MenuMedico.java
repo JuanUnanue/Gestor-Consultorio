@@ -6,9 +6,13 @@ import Modelo.Direccion;
 import Modelo.Especialidad;
 import Paciente.GestorPaciente;
 import Usuario.GestorUsuario;
+import Medico.Agenda;
+import Usuario.UMedico;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -28,7 +32,8 @@ public class MenuMedico extends Menu{
     public void menuADMINMedicos() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        String menu = "\n \t1- Crear Medicos\n\t2-Inicializar Turnos \n\t 3-\n\t0- Salir al menu principal.\n";
+        int matricula=0;
+        String menu = "\n \t1- Crear Medicos\n\t2-Inicializar Turnos \n\t 3-Generar Usuario para medico\n\t0- Salir al menu principal.\n";
         int opc;
         do {
             System.out.println(menu);
@@ -43,13 +48,13 @@ public class MenuMedico extends Menu{
                     crearMedico();
                     break;
                 case 2:
-                    int matricula=mostrarYelegirMatricula();
+                    matricula=mostrarYelegirMatricula();
                     Medico medico=medicos.buscarMedico(matricula);
                     System.out.println("Perfecto! Comenzemos con la inicializacion para el Dr. "+medico.getApellido()+".");
-                    System.out.println("wuau");
+                    inicializadorTurnos(medico);
                     break;
                 case 3:
-
+                    generarUsuario(mostrarYelegirMatricula());
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");
@@ -130,8 +135,6 @@ public class MenuMedico extends Menu{
         System.out.print("Ingrese el número correspondiente al día deseado: ");
         int opcion = scanner.nextInt();
         scanner.nextLine();
-
-        // Validar la opción ingresada
         if (opcion >= 1 && opcion <= 5) {
             diaElegido = DayOfWeek.of(opcion);
             System.out.println("Día seleccionado: " + diaElegido);
@@ -160,10 +163,27 @@ public class MenuMedico extends Menu{
         return medicoUtilizar;
     }
     public void inicializadorTurnos(Medico medico){
-        Dayofweek dia=mostrarYelegirDiaSemana();
-
+        int flag=0;
+        Agenda agenda = new Agenda();
+        while(flag!=1) {
+            DayOfWeek dia = mostrarYelegirDiaSemana();
+            System.out.println("¿A que hora inicia con los turnos?");
+            int horaHinicio = scanner.nextInt();
+            scanner.nextLine();
+            System.out.println("¿Y a que hora termina con los turno?");
+            int horaFinal = scanner.nextInt();
+            scanner.nextLine();
+            agenda.inicializarTurnosDisponibles(dia, LocalDateTime.now(), LocalTime.of(horaHinicio, 0), LocalTime.of(horaFinal, 0), medico.getMatricula());
+            System.out.println("Desea seguir agegando turnos el Dr. "+medico.getApellido()+"?\n 1.Seguir ingresando turnos disponibles      2. Salir.");
+            int i=scanner.nextInt();
+            scanner.nextLine();
+            if(i==2){
+                flag=1;
+                medico.setAgenda(agenda);
+                System.out.println(medico.getAgenda().toString());
+            }
+        }
     }
-    //public void inicializarTurnosDisponibles(DayOfWeek diaSemana,LocalDateTime diaInicio, LocalTime horaInicio, LocalTime horaFinal,int matricula)
 
     public int mostrarYelegirMatricula(){
         int matricula = 0;
@@ -198,5 +218,26 @@ public class MenuMedico extends Menu{
         }
         return opcion;
     }
-
+    public void generarUsuario(int matricula){
+        boolean rta=true;
+        String username="";
+        while (rta){
+            System.out.println("Ingrese el username: ");
+            username=scanner.nextLine();
+            rta=usuarios.buscarUserName(username);
+            if(!rta){
+                System.out.println("Username disponible!");
+            }else {
+                System.out.println("Username no esta disponible. Intente nuevamente.");
+            }
+        }
+        System.out.println("Ingrese una contraseña: ");
+        String pass=scanner.nextLine();
+        UMedico user=new UMedico(username,pass,medicos.buscarMedico(matricula));
+        usuarios.agregarUsuario(user);
+    }
+    /*
+    public void modificarMedico(Medico medico){
+    }
+    */
 }

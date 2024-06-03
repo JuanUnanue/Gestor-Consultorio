@@ -22,11 +22,16 @@ public class Turno {
         this.fechaHora = fechaHora;
         this.disponible = disponible;
     }
-
+    public Turno(LocalDateTime fechaHora, int matriculaMedico){
+        this.fechaHora = fechaHora;
+        this.matriculaMedico=matriculaMedico;
+        this.disponible=true;
+        dniPaciente=0;
+    }
     public Turno(LocalDateTime fechaHora, int matriculaMedico,boolean disponible){
         this.fechaHora = fechaHora;
         this.matriculaMedico=matriculaMedico;
-        disponible=true;
+        this.disponible=disponible;
         dniPaciente=0;
     }
 

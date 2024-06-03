@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-public class Menu {
+public class Menu implements IGestorMenu{
     private Scanner scanner;
     private GestorUsuario usuarios;
     private GestorPaciente pacientes;
@@ -29,10 +29,11 @@ public class Menu {
     }
 
     ///
+    @Override
     public void menuPrincipal() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t0- Finalizar Programa\n";
+        String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t4-Mostrar todos los medicos \n\t0- Finalizar Programa\n";
         int opc;
         this.usuarios.leerUsuarios();
         this.pacientes.leerPaciente();
@@ -56,6 +57,9 @@ public class Menu {
                 case 3:
                     usuarios.mostrarUsuarios();
                     break;
+                case 4:
+                    System.out.println(medicos.mostrarMedicos());
+                    break;
                 default:
                     System.out.println("Ingrese una opcion valida");
             }
@@ -67,7 +71,7 @@ public class Menu {
     }
     public void menuADMIN() {
 
-        String menu = "\n \t1- Pacientes\n\t2-Medicos \n\t 3-\n\t0- Salir al menu principal\n";
+        String menu = "\n \t1- Pacientes\n\t2-Medicos \n\t 3-Secretarias\n\t\n\t0- Salir al menu principal\n";
         int opc;
         do {
             System.out.println(menu);
@@ -78,38 +82,10 @@ public class Menu {
                     System.out.println("Saliendo del menu ADMIN");
                     break;
                 case 1:
-                    menuADMINPacientes();
+                    
                     break;
                 case 2:
 
-                    break;
-                case 3:
-
-                    break;
-                default:
-                    System.out.println("Ingrese una opcion valida");
-            }
-        } while (opc != 0);
-    }
-    public void menuADMINPacientes() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        String menu = "\n \t1- Crear Paciente\n\t2-Mostrar Pacientes \n\t 3-\n\t0- Salir al menu principal\n";
-        int opc;
-        do {
-            System.out.println(menu);
-
-            opc = this.scanner.nextInt();
-            switch (opc) {
-                case 0:
-                    System.out.println("Saliendo al menu principal");
-                    break;
-                case 1:
-                    crearPaciente();
-                    scanner.nextLine();
-                    break;
-                case 2:
-                    pacientes.mostrarPacientes();
                     break;
                 case 3:
 
@@ -155,42 +131,7 @@ public class Menu {
         System.out.println(usuarios.agregarUsuario(new Usuario(user,contraseña)));
     }
     ///
-    public void crearPaciente(){
-        boolean flag=true;
-        int dni=0;
-        while (flag){
-            System.out.println("Ingrese D.N.I: ");
-            dni=scanner.nextInt();
-            scanner.nextLine();
-            boolean rta=pacientes.buscarDNI(dni);
-            if (!rta){
-                flag=false;
-            }else {
-                System.out.println("Ya existe un paciente con ese numero de documento. Intente nuevamente");
-            }
-        }
-        System.out.println("Ingrese Nombre: ");
-        String nombre=scanner.nextLine();
-        System.out.println("Ingrese Apellido: ");
-        String apellido=scanner.nextLine();
-        System.out.println("Ingrese fecha de nacimiento.\nDia:  ");
-        int dia=scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Mes:");
-        int mes=scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Año:  ");
-        int año=scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Ingrese Calle: ");
-        String calle=scanner.nextLine();
-        System.out.println("Ingrese Numero: ");
-        int nro=scanner.nextInt();
-        scanner.nextLine();
-        System.out.println("Ingrese Ciudad: ");
-        String ciudad=scanner.nextLine();
-        System.out.println(pacientes.agregarPaciente((new Paciente(nombre,apellido, LocalDate.of(año,mes,dia),dni,new Direccion(calle,nro,ciudad)))));
-    }
+
     ///
 
 

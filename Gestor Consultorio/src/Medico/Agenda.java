@@ -3,13 +3,15 @@ package Medico;
 import Turno.IGestorTurno;
 import Turno.Turno;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Agenda implements IGestorTurno {
+public class Agenda implements Serializable,IGestorTurno {
+    private static final long serialVersionUID =  1092635162470550007L;
     private HashMap<DayOfWeek, ArrayList<Turno> >turnos;
     //
     public Agenda() {
@@ -60,7 +62,7 @@ public class Agenda implements IGestorTurno {
                 LocalDateTime horaActual=fechaActual.with(horaInicio);
                 LocalDateTime limiteHora=fechaActual.with(horaFinal);
                 while(horaActual.isBefore(limiteHora)){
-                    turnosDispo.add(new Turno(horaActual,matricula,true));
+                    turnosDispo.add(new Turno(horaActual,matricula));
                     horaActual=horaActual.plusMinutes(15);
                 }
             }

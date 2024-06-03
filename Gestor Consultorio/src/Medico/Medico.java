@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 
 public class Medico extends Persona implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int matricula;
     private Especialidad especialidad;
     private Agenda agenda;;
@@ -51,6 +52,7 @@ public class Medico extends Persona implements Serializable {
         return "Medico{" + super.toString()+
                 "matricula=" + matricula +
                 ", especialidad=" + especialidad +
+                ",agenda" + agenda.toString() +
                 '}'+ "\n";
     }
 }

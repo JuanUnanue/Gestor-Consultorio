@@ -51,6 +51,6 @@ public class Medico extends Persona implements Serializable {
         return "Medico{" + super.toString()+
                 "matricula=" + matricula +
                 ", especialidad=" + especialidad +
-                '}';
+                '}'+ "\n";
     }
 }

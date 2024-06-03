@@ -25,8 +25,37 @@ public class GestorMedico {
     public GestorMedico(HashSet<Medico> listadoMedicos) {
         this.listadoMedicos = new HashSet<>();
     }
-    public void agregarMedico(Medico medico){
-        listadoMedicos.add(medico);
+    public String agregarMedico(Medico medico){
+        this.listadoMedicos.add(medico);
+        return "Se creo el medico correctamente!";
+    }
+
+    public HashSet<Medico> getListadoMedicos() {
+        return listadoMedicos;
+    }
+
+    public boolean validacionMatricula(int matricula){   //Devuelve verdadero o falso dependiendo de si ya existe en el sistema
+        Iterator<Medico>iterator=listadoMedicos.iterator();
+        boolean rta=false;
+        while (iterator.hasNext()){
+            Medico aux=iterator.next();
+            if(aux.getMatricula()==matricula){
+                rta=true;
+            }
+        }
+        return rta;
+    }
+    public Medico buscarMedico(int matricula){   //Devuelve el medico
+        Iterator<Medico>iterator=listadoMedicos.iterator();
+        Medico rta=new Medico();
+
+        while (iterator.hasNext()){
+            Medico aux=iterator.next();
+            if(aux.getMatricula()==matricula){
+                rta=aux;
+            }
+        }
+        return rta;
     }
     public String mostrarMedicos(){
         Iterator<Medico>iterator=listadoMedicos.iterator();
@@ -145,4 +174,9 @@ public class GestorMedico {
             e.printStackTrace();
         }
     }
+    ///
+
+
+
+
 }

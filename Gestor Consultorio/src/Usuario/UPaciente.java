@@ -2,9 +2,15 @@ package Usuario;
 
 import Paciente.Paciente;
 
-public class UPaciente extends Usuario{
+import java.io.Serializable;
+
+public class UPaciente extends Usuario implements Serializable {
     private Paciente paciente;
     //
+
+    public UPaciente() {
+    }
+
     public UPaciente(String username, String contraseña, Paciente paciente) {
         super(username, contraseña);
         this.paciente = paciente;
@@ -14,7 +20,7 @@ public class UPaciente extends Usuario{
     }
     @Override
     public String toString() {
-        return "UPaciente{" +
+        return "UPaciente{" + super.toString()+
                 "paciente=" + paciente +
                 '}';
     }

@@ -4,14 +4,14 @@ import Medico.Medico;
 import Paciente.Paciente;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Turno {
     private int dniPaciente;
     private int matriculaMedico;
     private LocalDateTime fechaHora;
     private boolean disponible;
-    //
-
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public Turno() {
     }

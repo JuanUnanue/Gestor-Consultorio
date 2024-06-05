@@ -53,9 +53,15 @@ public class Menu {
                     System.out.println("Saliendo del programa");
                     break;
                 case 1:
-                   // Usuario user=inicioSesion();
-                   menuPaciente.menuPrincipal();
-                    //menuMedico.menuADMINMedicos();
+                   Usuario user=inicioSesion();
+                   if(user instanceof UPaciente){
+                       UPaciente paciente=(UPaciente) user;
+                       menuPaciente.menuPrincipal(paciente);
+                   }else {
+                       System.out.println("que sera este user jaja");
+                       menuMedico.menuADMINMedicos();
+                   }
+
                     break;
                 case 2:
                     menuPaciente.crearUsuario();
@@ -104,15 +110,24 @@ public class Menu {
 
     ///
     public Usuario inicioSesion() {
-        System.out.println("Ingrese usuario: ");
-        String user = scanner.next();
-        scanner.nextLine();
-        System.out.println("Ingrese Contraseña: ");
-        String contraseña = scanner.next();
-        scanner.nextLine();
-        Usuario aux=usuarios.buscarUsuario(user,contraseña);
-        if(aux!=null){
-            System.out.println("Inicio de sesión exitoso. Bienvenido, " + aux.getUsername());
+        int flag=0;
+        Usuario aux=new Usuario();
+        boolean rta=false;
+        while (flag==0) {
+            System.out.println("Ingrese usuario: ");
+            String user = scanner.next();
+            scanner.nextLine();
+            System.out.println("Ingrese Contraseña: ");
+            String contraseña = scanner.next();
+            scanner.nextLine();
+            rta = usuarios.buscarUsuario(user, contraseña);
+            if (rta) {
+                aux=usuarios.obtenerUsuario(user,contraseña);
+                System.out.println("Inicio de sesión exitoso. Bienvenido, " + aux.getUsername());
+                flag=1;
+            }else {
+                System.out.println("Usuario y contraseña incorrectos. Intente nuevamente.");
+            }
         }
         return aux;
     }

@@ -177,15 +177,19 @@ public class GestorMedico {
                     JSONArray turnosJson=diaJson.getJSONArray("turnos");
                     for(int k=0;k<turnosJson.length();k++){
                         JSONObject tJson=turnosJson.getJSONObject(k);
-                        int nroMatricula= tJson.getInt("matriculaMedico");
                         String fechaHoraString = tJson.getString("fechaHora");
                         LocalDateTime fechaHora = LocalDateTime.parse(fechaHoraString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
                         boolean disponibilidad = tJson.getBoolean("disponibilidad");
-                        if (tJson.has("dniPaciente")) {
-                            int dniPaciente = tJson.getInt("dniPaciente");
-                            turno = new Turno(dniPaciente, nroMatricula, fechaHora, disponibilidad);
-                        } else {
-                            turno = new Turno(fechaHora, nroMatricula, disponibilidad);
+                        if (tJson.has("matriculaMedico")) {
+                            int nroMatricula=tJson.getInt("matriculaMedico");
+                            if (tJson.has("dniPaciente")) {
+                                int dniPaciente = tJson.getInt("dniPaciente");
+                                turno = new Turno(dniPaciente, nroMatricula, fechaHora, disponibilidad);
+                            } else {
+                                turno = new Turno(fechaHora, nroMatricula, disponibilidad);
+                            }
+                        }else {
+                            turno=new Turno();
                         }
                         turnosDelDia.add(turno);
                     }

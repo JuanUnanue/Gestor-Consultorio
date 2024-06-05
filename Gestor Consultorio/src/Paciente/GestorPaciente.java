@@ -1,13 +1,8 @@
 package Paciente;
 
-import Modelo.Direccion;
-import Usuario.Usuario;
-
 import java.io.*;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Scanner;
 
 public class GestorPaciente{
     private final String ARCHIVO_PACIENTE="Pacientes.bin";
@@ -27,6 +22,17 @@ public class GestorPaciente{
             Paciente aux=iterator.next();
             if(aux.getDni()==DNI){
                 rta=true;
+            }
+        }
+        return rta;
+    }
+    public Paciente buscarPaciente(int dni){
+        Iterator<Paciente>iterator=listadoPacientes.iterator();
+        Paciente rta=new Paciente();
+        while (iterator.hasNext()){
+            Paciente aux=iterator.next();
+            if(aux.getDni()==dni){
+                rta=aux;
             }
         }
         return rta;

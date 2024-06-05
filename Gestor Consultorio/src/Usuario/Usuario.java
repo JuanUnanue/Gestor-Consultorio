@@ -6,7 +6,6 @@ import java.util.Objects;
 
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 5861253745568102989L;
-    private int id;
     private String username;
     private String contraseña;
     private boolean activo;
@@ -21,13 +20,6 @@ public class Usuario implements Serializable {
         this.activo=false;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    private void setId(int id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
@@ -63,7 +55,6 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "Usuario{" +
-                "id=" + id +
                 ", username='" + username + '\'' +
                 ", contraseña='" + contraseña + '\'' +
                 '}';

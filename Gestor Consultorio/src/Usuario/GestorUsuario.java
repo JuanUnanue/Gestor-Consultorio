@@ -1,9 +1,16 @@
 package Usuario;
 
+import Medico.Medico;
+import Modelo.Especialidad;
+import Turno.Turno;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.*;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.time.DayOfWeek;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class GestorUsuario {
     private HashSet<Usuario> listadoUsuarios;
@@ -57,41 +64,37 @@ public class GestorUsuario {
         }
     }
     public void guardarUsuarios(){
-        ObjectOutputStream objectOutputStream=null;
-        Iterator<Usuario> usuarioIterator = listadoUsuarios.iterator();
-        try{
-            FileOutputStream fileOutputStream=new FileOutputStream("Usuarios.bin");
-            objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            while (usuarioIterator.hasNext())
-            {
-                Usuario aux = usuarioIterator.next();
-                objectOutputStream.writeObject(aux);
-            }
-        }
-        catch (FileNotFoundException ex)
-        {
-            ex.printStackTrace();
-        }
-        catch (IOException exception)
-        {
+        JSONArray jsonArray = new JSONArray();
+        try {
+            Iterator<Usuario> iterator = listadoUsuarios.iterator();
+                while (iterator.hasNext()) {
+                    Usuario usuario = iterator.next();
+                    JSONObject jo = new JSONObject();
+                    if(!(usuario instanceof UAdmin)){
+
+                        jo.put("apellido",);
+                    }
+
+                }
+
+        }catch (JSONException exception) {
             exception.printStackTrace();
         }
-        finally
-        {
-            try
-            {
-                objectOutputStream.close();
-            }
-            catch (IOException ex)
-            {
-                ex.printStackTrace();
-            }
-
-        }
     }
-    public Usuario buscarUsuario(String user, String contraseña){
+    public boolean buscarUsuario(String user, String contraseña){ //devuelve verdadero o falso si esta correcto el usuario y contraseña
         Iterator<Usuario>iterator= listadoUsuarios.iterator();
-        Usuario rta=null;
+        boolean rta=false;
+        while (iterator.hasNext()){
+            Usuario aux= iterator.next();
+            if(aux.getUsername().equals(user) && aux.getContraseña().equals(contraseña)){
+                rta=true;
+            }
+        }
+        return rta;
+    }
+    public Usuario obtenerUsuario(String user, String contraseña){ //devuelve el usuario
+        Iterator<Usuario>iterator= listadoUsuarios.iterator();
+        Usuario rta=new Usuario();
         while (iterator.hasNext()){
             Usuario aux= iterator.next();
             if(aux.getUsername().equals(user) && aux.getContraseña().equals(contraseña)){
@@ -112,5 +115,26 @@ public class GestorUsuario {
         }
         return rta;
     }
+    private UsuarioJson convertirAUsuarioJSON(Usuario usuario) {
+    UsuarioJson usuarioJSON = new UsuarioJson();
+    usuarioJSON.setUsername(usuario.getUsername());
+    usuarioJSON.setContraseña(usuario.getContraseña());
 
+    if (usuario instanceof USecretaria) {
+        usuarioJSON.setTipo("Secretaria");
+        USecretaria u=(USecretaria) usuario;
+        usuarioJSON.setDni(u.getSecretaria().getDni());
+    } else if (usuario instanceof UMedico) {
+        usuarioJSON.setTipo("Medico");
+        UMedico m=(UMedico) usuario;
+        usuarioJSON.setNroMatricula(m.getMedico().getMatricula());
+    } else if (usuario instanceof UAdmin) {
+        usuarioJSON.setTipo("Admin");
+    } else if (usuario instanceof UPaciente){
+        usuarioJSON.setTipo("Paciente");
+        UPaciente u=(UPaciente) usuario;
+        usuarioJSON.setDni(u.getPaciente().getDni());
+    }
+    return usuarioJSON;
+    }
 }

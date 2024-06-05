@@ -38,9 +38,9 @@ public class Menu {
         System.out.flush();
         String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t4-Mostrar todos los medicos \n\t0- Finalizar Programa\n";
         int opc;
-        this.usuarios.leerUsuarios();
         this.pacientes.leerPaciente();
         this.medicos.leerListado();
+        this.usuarios.leerUsuarios(pacientes,medicos);
         MenuMedico menuMedico=new MenuMedico(scanner,usuarios,pacientes,medicos);
         MenuPaciente menuPaciente=new MenuPaciente(scanner,usuarios,pacientes,medicos);
         do {

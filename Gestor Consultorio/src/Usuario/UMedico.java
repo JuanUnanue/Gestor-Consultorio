@@ -19,4 +19,11 @@ public class UMedico extends Usuario implements Serializable {
     public void setMedico(Medico medico) {
         this.medico = medico;
     }
+
+    @Override
+    public String toString() {
+        return "UMedico{" +
+                "medico=" + medico.getApellido() + super.toString()+
+                '}';
+    }
 }

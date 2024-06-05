@@ -2,6 +2,7 @@ package Medico;
 
 import Modelo.Direccion;
 import Modelo.Especialidad;
+import Modelo.Json;
 import Turno.Turno;
 import org.json.JSONArray;
 
@@ -140,14 +141,14 @@ public class GestorMedico {
             }
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("Medicos", jsonArray);
-            JsonMedicos.grabar(jsonObject, "medicos");
+            Json.grabar(jsonObject, "medicos");
         } catch (JSONException exception) {
             exception.printStackTrace();
         }
     }
     public void leerListado(){
         try {
-            JSONObject object  = new JSONObject(JsonMedicos.leer("medicos"));
+            JSONObject object  = new JSONObject(Json.leer("medicos"));
             JSONArray jo_array = object.getJSONArray("Medicos");
 
             for (int i=0;i<jo_array.length();i++)

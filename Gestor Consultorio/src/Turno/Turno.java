@@ -3,15 +3,17 @@ package Turno;
 import Medico.Medico;
 import Paciente.Paciente;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Turno {
+public class Turno  implements Serializable{
     private int dniPaciente;
     private int matriculaMedico;
     private LocalDateTime fechaHora;
     private boolean disponible;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
 
     public Turno() {
     }
@@ -46,8 +48,8 @@ public class Turno {
         return dniPaciente;
     }
 
-    public void setPaciente(int paciente) {
-        this.dniPaciente = paciente;
+    public void setDniPaciente(int dniPaciente) {
+        this.dniPaciente = dniPaciente;
     }
 
     public int getMatriculaMedico() {
@@ -76,10 +78,12 @@ public class Turno {
 
     @Override
     public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String fechaFormateada = fechaHora.format(formatter);
         return "Turno{" +
-             /*   "paciente=" + paciente +
-                ", medico=" + medico +*/
-                ", fechaHora=" + fechaHora +
+                "paciente=" + dniPaciente +
+              /*  ", medico=" + medico +*/
+                ", fechaHora=" + fechaFormateada +
                 ", disponible=" + disponible +
                 '}'+"\n";
     }

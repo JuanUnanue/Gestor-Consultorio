@@ -8,10 +8,11 @@ import Modelo.Direccion;
 import Paciente.GestorPaciente;
 import Paciente.Paciente;
 import Usuario.GestorUsuario;
-import Usuario.Usuario;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import Medico.Agenda;
 public class MenuPaciente extends Menu{
@@ -49,8 +50,7 @@ public class MenuPaciente extends Menu{
                     System.out.println("Saliendo al menu principal");
                     break;
                 case 1:
-                    buscarElegirMedico();
-                    System.out.println("wuauuuu");
+                    sacarTurno(user.getPaciente());
                     break;
                 case 3:
 
@@ -197,6 +197,7 @@ public class MenuPaciente extends Menu{
         Medico aux=seleccionarMedico(medicos.getListadoMedicos().get(especialidadSeleccionada));
         return aux;
     }
+
     public Medico seleccionarMedico(HashSet<Medico>listado){
     ArrayList<Medico> listaMedicos=new ArrayList<>(listado);
     System.out.println("Seleccione un médico:");
@@ -217,14 +218,38 @@ public class MenuPaciente extends Menu{
         System.out.println("Médico seleccionado: " + medicoSeleccionado.getNombre() + " " + medicoSeleccionado.getApellido());
         return medicoSeleccionado;
     }
-    public void sacarTurno(){
+
+    public void sacarTurno(Paciente paciente){
         Medico medico=buscarElegirMedico();
         Agenda agenda=medico.getAgenda();
-        DayOfWeek dia=seleccionDiaDisponible(agenda);
+        DayOfWeek diaSemana=seleccionDiaDisponible(agenda);
         System.out.println("Estos son los turnos disponibles :");
-
+        HashMap<LocalDate,ArrayList<Turno>> turnosDisponibles=obtenerTurnosDisponibles(agenda.getTurnos().get(diaSemana));
+        Iterator<Map.Entry<LocalDate,ArrayList<Turno>>>entryIterator=turnosDisponibles.entrySet().iterator();
+        LocalDate diaElegido=seleccionDiaTurno(turnosDisponibles);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fechaFormateada = diaElegido.format(formatter);
+        System.out.println("Dia elegido: "+fechaFormateada);
+        ArrayList<Turno>turnosDelDia=turnosDisponibles.get(diaElegido);
+        Turno turno=elegirTurnoDelDia(turnosDelDia,fechaFormateada);
+        turno.setDisponible(false);
+        turno.setDniPaciente(paciente.getDni());
+        paciente.agregarTurno(turno);
+        System.out.println(turno);
 
     }
+    public HashMap<LocalDate,ArrayList<Turno>> obtenerTurnosDisponibles(ArrayList<Turno> turnos){
+        HashMap<LocalDate,ArrayList<Turno>> entryMap=new HashMap<>();
+        for (Turno turno : turnos) {
+            if (turno.isDisponible()) {
+                LocalDate diaSinHora = turno.getFechaHora().toLocalDate();
+                entryMap.putIfAbsent(diaSinHora, new ArrayList<>());
+                entryMap.get(diaSinHora).add(turno);
+            }
+        }
+        return entryMap;
+    }
+
     public DayOfWeek seleccionDiaDisponible(Agenda agenda){
         Iterator<Map.Entry<DayOfWeek, ArrayList<Turno> >> entryIterator=agenda.getTurnos().entrySet().iterator();
         ArrayList<DayOfWeek>diasDispo=new ArrayList<>();
@@ -246,5 +271,49 @@ public class MenuPaciente extends Menu{
             }
         }while (opcion < 1 || opcion > diasDispo.size());
      return diasDispo.get(opcion-1);
+    }
+
+    public LocalDate seleccionDiaTurno(HashMap<LocalDate,ArrayList<Turno>> turnos){
+        Iterator<Map.Entry<LocalDate,ArrayList<Turno>>> entryIterator=turnos.entrySet().iterator();
+        ArrayList<LocalDate> aux=new ArrayList<>();
+        System.out.println("Seleccione el dia: ");
+        while (entryIterator.hasNext()){
+            Map.Entry<LocalDate,ArrayList<Turno>> entry=entryIterator.next();
+            aux.add(entry.getKey());
+        }
+        Collections.sort(aux, Comparator.naturalOrder());
+        for (int i=0;i< aux.size();i++)
+        {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String fechaFormateada = aux.get(i).format(formatter);
+            System.out.println((i+1+". "+fechaFormateada));
+        }
+        int opcion=0;
+        do{
+            System.out.print("Ingrese el número del dia elegido: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            if (opcion < 1 || opcion > turnos.size()) {
+                System.out.println("Opción inválida. Intente nuevamente.");
+            }
+        }while (opcion < 1 || opcion > turnos.size());
+        return aux.get(opcion-1);
+    }
+
+    public Turno elegirTurnoDelDia(ArrayList<Turno>turnos,String dia){
+        System.out.println("Estos son los turnos disponibles para el "+dia);
+        for (int i=0;i< turnos.size();i++){
+            System.out.println((i+1+". "+turnos.get(i)));
+        }
+        int opcion=0;
+        do{
+            System.out.print("Ingrese el número del dia: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            if (opcion < 1 || opcion > turnos.size()) {
+                System.out.println("Opción inválida. Intente nuevamente.");
+            }
+        }while (opcion < 1 || opcion > turnos.size());
+        return turnos.get(opcion-1);
     }
 }

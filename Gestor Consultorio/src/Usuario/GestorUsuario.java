@@ -1,14 +1,19 @@
 package Usuario;
 
 import Medico.Medico;
+import Modelo.Direccion;
 import Modelo.Especialidad;
+import Modelo.Json;
+import Paciente.GestorPaciente;
 import Turno.Turno;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+import Medico.GestorMedico;
 import java.io.*;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -33,34 +38,39 @@ public class GestorUsuario {
         return "Se creo el usuario correctamente!";
     }
     //
-    public void leerUsuarios() { //Trae del archivo los usaurios a un HashSet
-        ObjectInputStream objectInputStream = null;
+    public void leerUsuarios(GestorPaciente pacientes, GestorMedico medicos) { //Trae del archivo los usuarios a un HashSet
         try {
-            FileInputStream fileInputStream = new FileInputStream("Usuarios.bin");
-            objectInputStream = new ObjectInputStream(fileInputStream);
-            Usuario aux;
-            while (true) {
-                try {
-                    aux = (Usuario) objectInputStream.readObject();
-                    listadoUsuarios.add(aux);
-                } catch (EOFException ex) {
-                    break;
+            JSONObject object  = new JSONObject(Json.leer("usuarios"));
+            JSONArray jsonArray = object.getJSONArray("usuarios");
+
+            for (int i=0;i<jsonArray.length();i++)
+            {
+                JSONObject usuarioJSON = jsonArray.getJSONObject(i);
+                String tipo = usuarioJSON.getString("tipo");
+                String username = usuarioJSON.getString("username");
+                String contraseña = usuarioJSON.getString("contraseña");
+                int dni=0;
+                switch (tipo) {
+                    case "Secretaria":
+                        dni= usuarioJSON.getInt("dni");
+                        break;
+                    case "Paciente":
+                        dni= usuarioJSON.getInt("dni");
+                        UPaciente user=new UPaciente(username,contraseña,pacientes.buscarPaciente(dni));
+                        listadoUsuarios.add(user);
+                        break;
+                    case "Medico":
+                        int matricula= usuarioJSON.getInt("nroMatricula");
+                        UMedico uMedico=new UMedico(username,contraseña,medicos.buscarMedico(matricula));
+                        listadoUsuarios.add(uMedico);
+                        break;
+                    case "Admin":
+                        listadoUsuarios.add(new UAdmin(username, contraseña));
+                        break;
                 }
             }
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (objectInputStream != null) {
-                    objectInputStream.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
     public void guardarUsuarios(){
@@ -69,14 +79,13 @@ public class GestorUsuario {
             Iterator<Usuario> iterator = listadoUsuarios.iterator();
                 while (iterator.hasNext()) {
                     Usuario usuario = iterator.next();
-                    JSONObject jo = new JSONObject();
-                    if(!(usuario instanceof UAdmin)){
-
-                        jo.put("apellido",);
-                    }
-
+                    UsuarioJson usuarioJson=convertirAUsuarioJSON(usuario);
+                    JSONObject jo = new JSONObject(usuarioJson);
+                    jsonArray.put(jo);
                 }
-
+            JSONObject jsonObject=new JSONObject();
+                jsonObject.put("usuarios",jsonArray);
+            Json.grabar(jsonObject,"usuarios");
         }catch (JSONException exception) {
             exception.printStackTrace();
         }

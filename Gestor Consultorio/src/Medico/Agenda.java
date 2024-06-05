@@ -49,7 +49,7 @@ public class Agenda implements Serializable,IGestorTurno {
     public void inicializarTurnosDisponibles(DayOfWeek diaSemana,LocalDateTime diaInicio, LocalTime horaInicio, LocalTime horaFinal,Object object) {
         ArrayList<Turno> turnosDispo;
         LocalDateTime fechaActual=diaInicio;
-        LocalDateTime fechaFin=fechaActual.plusMonths(3);//Cada vez que se generan turnos disponibles, se hace desde una fecha especifica hasta 3 meses depsues, a pedido del cliente
+        LocalDateTime fechaFin=fechaActual.plusMonths(2);//Cada vez que se generan turnos disponibles, se hace desde una fecha especifica hasta 3 meses depsues, a pedido del cliente
         if(turnos.containsKey(diaSemana)){
             turnosDispo=turnos.get(diaSemana);
             turnosDispo.clear();
@@ -64,7 +64,7 @@ public class Agenda implements Serializable,IGestorTurno {
                 while(horaActual.isBefore(limiteHora)){
                     int matricula=(int) object;
                     turnosDispo.add(new Turno(horaActual,matricula));
-                    horaActual=horaActual.plusMinutes(15);
+                    horaActual=horaActual.plusMinutes(30);
                 }
             }
             fechaActual=fechaActual.plusDays(1);

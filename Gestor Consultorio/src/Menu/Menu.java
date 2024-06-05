@@ -1,17 +1,13 @@
 package Menu;
 
 import Medico.GestorMedico;
-import Modelo.Direccion;
 import Paciente.GestorPaciente;
-import Paciente.Paciente;
 import Usuario.GestorUsuario;
 import Usuario.Usuario;
-
-import java.io.IOException;
-import java.time.LocalDate;
+import Usuario.UPaciente;
 import java.util.Scanner;
 
-public class Menu implements IGestorMenu{
+public class Menu {
     private Scanner scanner;
     private GestorUsuario usuarios;
     private GestorPaciente pacientes;
@@ -24,12 +20,19 @@ public class Menu implements IGestorMenu{
         this.medicos=new GestorMedico();
     }
 
+    public Menu(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos) {
+        this.scanner = scanner;
+        this.usuarios = usuarios;
+        this.pacientes = pacientes;
+        this.medicos = medicos;
+    }
+
     public GestorPaciente getPacientes() {
         return pacientes;
     }
 
     ///
-    @Override
+
     public void menuPrincipal() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -39,20 +42,23 @@ public class Menu implements IGestorMenu{
         this.pacientes.leerPaciente();
         this.medicos.leerListado();
         MenuMedico menuMedico=new MenuMedico(scanner,usuarios,pacientes,medicos);
+        MenuPaciente menuPaciente=new MenuPaciente(scanner,usuarios,pacientes,medicos);
         do {
             System.out.println(menu);
 
             opc = this.scanner.nextInt();
+            scanner.nextLine();
             switch (opc) {
                 case 0:
                     System.out.println("Saliendo del programa");
                     break;
                 case 1:
                    // Usuario user=inicioSesion();
-                    menuMedico.menuADMINMedicos();
+                   menuPaciente.menuPrincipal();
+                    //menuMedico.menuADMINMedicos();
                     break;
                 case 2:
-                    crearUsuario();
+                    menuPaciente.crearUsuario();
                     break;
                 case 3:
                     usuarios.mostrarUsuarios();
@@ -82,7 +88,7 @@ public class Menu implements IGestorMenu{
                     System.out.println("Saliendo del menu ADMIN");
                     break;
                 case 1:
-                    
+
                     break;
                 case 2:
 
@@ -112,23 +118,7 @@ public class Menu implements IGestorMenu{
     }
     ///
     public void crearUsuario(){
-        boolean flag=true;
-        String user="";
-        while (flag){
-            System.out.println("Ingrese userName: ");
-            user=scanner.next();
-            scanner.nextLine();
-            boolean rta=usuarios.buscarUserName(user);
-            if (!rta){
-                flag=false;
-            }else {
-                System.out.println("Ese userName ya existe. Intente nuevamente");
-            }
-        }
-        System.out.println("Ingrese contraseña: ");
-        String contraseña=scanner.next();
-        scanner.nextLine();
-        System.out.println(usuarios.agregarUsuario(new Usuario(user,contraseña)));
+
     }
     ///
 

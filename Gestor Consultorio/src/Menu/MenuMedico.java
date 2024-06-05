@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MenuMedico extends Menu{
@@ -23,12 +24,28 @@ public class MenuMedico extends Menu{
     private GestorPaciente pacientes;
     private GestorMedico medicos;
     //
+
+    public MenuMedico() {
+    }
+
     public MenuMedico(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos) {
         this.scanner = scanner;
         this.usuarios = usuarios;
         this.pacientes = pacientes;
         this.medicos = medicos;
     }
+    /////
+
+    @Override
+    public void menuPrincipal() {
+
+    }
+
+    @Override
+    public void crearUsuario() {
+
+    }
+
     public void menuADMINMedicos() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -49,7 +66,7 @@ public class MenuMedico extends Menu{
                     break;
                 case 2:
                     matricula=mostrarYelegirMatricula();
-                    Medico medico=medicos.buscarMedico(matricula);
+                    Medico medico=this.medicos.buscarMedico(matricula);
                     System.out.println("Perfecto! Comenzemos con la inicializacion para el Dr. "+medico.getApellido()+".");
                     inicializadorTurnos(medico);
                     break;
@@ -191,11 +208,16 @@ public class MenuMedico extends Menu{
         int i = 1;
         boolean rta=false;
         int flag=0;
-        Iterator<Medico>iterator=medicos.getListadoMedicos().iterator();
-        while (iterator.hasNext()){
-            Medico aux=iterator.next();
-            System.out.println(i+")     Dr. "+aux.getApellido()+"     "+aux.getMatricula());
-            i++;
+        Iterator<Map.Entry<Especialidad,HashSet<Medico>>> entryIterator=medicos.getListadoMedicos().entrySet().iterator();
+        while(entryIterator.hasNext()) {
+            Map.Entry<Especialidad,HashSet<Medico>> medicosMapa=entryIterator.next();
+            HashSet<Medico>medicoHashSet=medicosMapa.getValue();
+            Iterator<Medico>medicoIterator= medicoHashSet.iterator();
+            while (medicoIterator.hasNext()) {
+                Medico aux = medicoIterator.next();
+                System.out.println(i + ")     Dr. " + aux.getApellido() + "     " + aux.getMatricula());
+                i++;
+            }
         }
         int opcion=0;
         while (flag==0){

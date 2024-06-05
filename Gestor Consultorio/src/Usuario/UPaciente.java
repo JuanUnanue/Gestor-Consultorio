@@ -5,7 +5,7 @@ import Paciente.Paciente;
 public class UPaciente extends Usuario{
     private Paciente paciente;
     //
-    public UPaciente(int id, String username, String contraseña, Paciente paciente) {
+    public UPaciente(String username, String contraseña, Paciente paciente) {
         super(username, contraseña);
         this.paciente = paciente;
     }

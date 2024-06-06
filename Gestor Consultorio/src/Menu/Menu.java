@@ -6,6 +6,7 @@ import Usuario.GestorUsuario;
 import Usuario.Usuario;
 import Usuario.UPaciente;
 import java.util.Scanner;
+import Usuario.UAdmin;
 
 public class Menu {
     private Scanner scanner;
@@ -57,7 +58,7 @@ public class Menu {
                    if(user instanceof UPaciente){
                        UPaciente paciente=(UPaciente) user;
                        menuPaciente.menuPrincipal(paciente);
-                   }else {
+                   }else if (user instanceof UAdmin){
                        System.out.println("que sera este user jaja");
                        menuMedico.menuADMINMedicos();
                    }

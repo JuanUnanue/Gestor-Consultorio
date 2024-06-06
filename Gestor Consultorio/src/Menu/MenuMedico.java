@@ -52,6 +52,7 @@ public class MenuMedico extends Menu{
         int matricula=0;
         String menu = "\n \t1- Crear Medicos\n\t2-Inicializar Turnos \n\t 3-Generar Usuario para medico\n\t0- Salir al menu principal.\n";
         int opc;
+        Medico medico=new Medico();
         do {
             System.out.println(menu);
 
@@ -62,16 +63,21 @@ public class MenuMedico extends Menu{
                     System.out.print("\033[H\033[2J");
                     break;
                 case 1:
-                    crearMedico();
+                    System.out.println(crearMedico());
                     break;
                 case 2:
                     matricula=mostrarYelegirMatricula();
-                    Medico medico=this.medicos.buscarMedico(matricula);
+                    medico=this.medicos.buscarMedico(matricula);
                     System.out.println("Perfecto! Comenzemos con la inicializacion para el Dr. "+medico.getApellido()+".");
                     inicializadorTurnos(medico);
                     break;
                 case 3:
+
                     generarUsuario(mostrarYelegirMatricula());
+                    break;
+                case 4:
+                    usuarios.borrarUsuariosMedicos();
+                    System.out.println("Lito");
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");
@@ -121,7 +127,7 @@ public class MenuMedico extends Menu{
             especialidad=mostrarYelegirEspecialidad();
         }
         Medico medico=new Medico(nombre,apellido, LocalDate.of(año,mes,dia),dni,new Direccion(calle,nro,ciudad),matricula,especialidad);
-        System.out.println(medicos.agregarMedico(medico));
+        rta+=medicos.agregarMedico(medico);
         return rta;
     }
     public Especialidad mostrarYelegirEspecialidad(){
@@ -179,9 +185,10 @@ public class MenuMedico extends Menu{
         }
         return medicoUtilizar;
     }
+
     public void inicializadorTurnos(Medico medico){
         int flag=0;
-        Agenda agenda = new Agenda();
+        Agenda agenda = medico.getAgenda();
         while(flag!=1) {
             DayOfWeek dia = mostrarYelegirDiaSemana();
             System.out.println("¿A que hora inicia con los turnos?");
@@ -190,7 +197,7 @@ public class MenuMedico extends Menu{
             System.out.println("¿Y a que hora termina con los turno?");
             int horaFinal = scanner.nextInt();
             scanner.nextLine();
-            agenda.inicializarTurnosDisponibles(dia, LocalDateTime.now(), LocalTime.of(horaHinicio, 0), LocalTime.of(horaFinal, 0), medico.getMatricula());
+            agenda.generadorTurnosDisponibles(dia, LocalDateTime.now(), LocalTime.of(horaHinicio, 0), LocalTime.of(horaFinal, 0), medico.getMatricula());
             System.out.println("Desea seguir agegando turnos el Dr. "+medico.getApellido()+"?\n 1.Seguir ingresando turnos disponibles      2. Salir.");
             int i=scanner.nextInt();
             scanner.nextLine();

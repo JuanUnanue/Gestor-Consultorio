@@ -26,15 +26,17 @@ public class GestorMedico {
     public GestorMedico(HashSet<Medico> listadoMedicos) {
         this.listadoMedicos=new HashMap<>();
     }
-    public String agregarMedico(Medico medico){
-        HashSet<Medico>listado=new HashSet<>();
-        if(listadoMedicos.containsKey(medico.getEspecialidad())){
-            listadoMedicos.get(medico.getEspecialidad());
-        }else {
-            listadoMedicos.put(medico.getEspecialidad(),listado);
+    public String agregarMedico(Medico medico) {
+        HashSet<Medico> listado;
+        if (listadoMedicos.containsKey(medico.getEspecialidad())) {
+            listado = listadoMedicos.get(medico.getEspecialidad());
+        } else {
+            listado = new HashSet<>();
+            listadoMedicos.put(medico.getEspecialidad(), listado);
         }
-        listado.add(medico);
-        return "Se creo el medico correctamente!";
+
+        boolean agregado = listado.add(medico);
+        return agregado ? "Se creó el médico correctamente!" : "El médico ya existe en la lista.";
     }
 
     public HashMap<Especialidad,HashSet<Medico>> getListadoMedicos() {
@@ -113,13 +115,16 @@ public class GestorMedico {
                     String especialidad = aux.getEspecialidad().toString();
                     jo.put("especialidad", especialidad);
                     JSONArray agendaJson = new JSONArray();
-                    HashMap<DayOfWeek, ArrayList<Turno>> turnos = aux.getAgenda().getTurnos();
-                    Iterator<Map.Entry<DayOfWeek, ArrayList<Turno>>> iteratorTurnos = turnos.entrySet().iterator();
+                    HashMap<DayOfWeek,  HashSet<Turno>> turnos = aux.getAgenda().getTurnos();
+                    Iterator<Map.Entry<DayOfWeek,  HashSet<Turno>>> iteratorTurnos = turnos.entrySet().iterator();
                     while (iteratorTurnos.hasNext()) {
-                        Map.Entry<DayOfWeek, ArrayList<Turno>> entradaMapa = iteratorTurnos.next();
-                        DayOfWeek diaSemana = entradaMapa.getKey();
+                        Map.Entry<DayOfWeek,  HashSet<Turno>> entradaMapa = iteratorTurnos.next();
                         JSONArray turnosDia = new JSONArray();
-                        for (Turno turno : entradaMapa.getValue()) {
+                        DayOfWeek diaSemana = entradaMapa.getKey();
+                        HashSet<Turno> turnosDelDia = entradaMapa.getValue();
+                        Iterator<Turno>turnoIterator=turnosDelDia.iterator();
+                        while (turnoIterator.hasNext()) {
+                            Turno turno=turnoIterator.next();
                             JSONObject turnoJson = new JSONObject();
                             if (turno.getPaciente() != 0) {
                                 turnoJson.put("dniPaciente", turno.getPaciente());
@@ -168,14 +173,14 @@ public class GestorMedico {
                 int matricula= jo.getInt("matricula");
                 Especialidad especialidad=Especialidad.valueOf(jo.getString("especialidad"));
 
-                HashMap<DayOfWeek,ArrayList<Turno>>agenda=new HashMap<>();
+                HashMap<DayOfWeek, HashSet<Turno>>agenda=new HashMap<>();
                 JSONArray agendaJson=jo.getJSONArray("agenda");
-                ArrayList<Turno>turnosDelDia=new ArrayList<>();
                 for(int j=0;j<agendaJson.length();j++){
                     Turno turno=new Turno();
                     JSONObject diaJson=agendaJson.getJSONObject(j);
                     DayOfWeek diaSemana=DayOfWeek.valueOf(diaJson.getString("diaSemana"));
                     JSONArray turnosJson=diaJson.getJSONArray("turnos");
+                    HashSet<Turno>turnosDelDia=new HashSet<>();
                     for(int k=0;k<turnosJson.length();k++){
                         JSONObject tJson=turnosJson.getJSONObject(k);
                         String fechaHoraString = tJson.getString("fechaHora");

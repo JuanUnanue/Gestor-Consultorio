@@ -146,4 +146,13 @@ public class GestorUsuario {
     }
     return usuarioJSON;
     }
+    public void borrarUsuariosMedicos() {
+        HashSet<Usuario> copiaListadoUsuarios = new HashSet<>(listadoUsuarios);
+        for (Usuario usuario : copiaListadoUsuarios) {
+            if (usuario instanceof UAdmin) {
+            }else {
+                listadoUsuarios.remove(usuario);
+            }
+        }
+    }
 }

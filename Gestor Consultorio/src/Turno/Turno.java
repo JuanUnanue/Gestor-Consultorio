@@ -14,7 +14,6 @@ public class Turno  implements Serializable{
     private boolean disponible;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-
     public Turno() {
     }
 

@@ -49,7 +49,7 @@ public class Medico extends Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Medico{" + super.getApellido()+super.getNombre()+
+        return "Medico{" + super.getApellido()+" "+super.getNombre()+
                 "matricula=" + matricula +
                 ", especialidad=" + especialidad +
                 ",agenda" + agenda.toString() +

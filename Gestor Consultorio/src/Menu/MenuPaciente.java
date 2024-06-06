@@ -1,6 +1,7 @@
 package Menu;
 import Medico.Medico;
 import Modelo.Especialidad;
+import Secretaria.GestorSecretaria;
 import Turno.Turno;
 import Usuario.UPaciente;
 import Medico.GestorMedico;
@@ -20,13 +21,15 @@ public class MenuPaciente extends Menu{
     private GestorUsuario usuarios;
     private GestorPaciente pacientes;
     private GestorMedico medicos;
+    private GestorSecretaria secretarias;
     private UPaciente user;
     //
-    public MenuPaciente(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos) {
+    public MenuPaciente(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos,GestorSecretaria secretarias) {
         this.scanner = scanner;
         this.usuarios = usuarios;
         this.pacientes = pacientes;
         this.medicos = medicos;
+        this.secretarias=secretarias;
         this.user=new UPaciente();
     }
 
@@ -121,7 +124,6 @@ public class MenuPaciente extends Menu{
         return aux;
     }
 
-    @Override
     public void crearUsuario() {
         int dni=0;
         Paciente paciente=new Paciente();

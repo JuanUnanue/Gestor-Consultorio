@@ -5,6 +5,8 @@ import Modelo.Direccion;
 import Modelo.Especialidad;
 import Modelo.Json;
 import Paciente.GestorPaciente;
+import Secretaria.GestorSecretaria;
+import Secretaria.Secretaria;
 import Turno.Turno;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +40,7 @@ public class GestorUsuario {
         return "Se creo el usuario correctamente!";
     }
     //
-    public void leerUsuarios(GestorPaciente pacientes, GestorMedico medicos) { //Trae del archivo los usuarios a un HashSet
+    public void leerUsuarios(GestorPaciente pacientes, GestorMedico medicos, GestorSecretaria secretarias) { //Trae del archivo los usuarios a un HashSet
         try {
             JSONObject object  = new JSONObject(Json.leer("usuarios"));
             JSONArray jsonArray = object.getJSONArray("usuarios");
@@ -53,6 +55,8 @@ public class GestorUsuario {
                 switch (tipo) {
                     case "Secretaria":
                         dni= usuarioJSON.getInt("dni");
+                        USecretaria uSecretaria=new USecretaria(username,contraseña,secretarias.buscarSecretaria(dni));
+                        listadoUsuarios.add(uSecretaria);
                         break;
                     case "Paciente":
                         dni= usuarioJSON.getInt("dni");
@@ -90,6 +94,7 @@ public class GestorUsuario {
             exception.printStackTrace();
         }
     }
+
     public boolean buscarUsuario(String user, String contraseña){ //devuelve verdadero o falso si esta correcto el usuario y contraseña
         Iterator<Usuario>iterator= listadoUsuarios.iterator();
         boolean rta=false;
@@ -101,6 +106,7 @@ public class GestorUsuario {
         }
         return rta;
     }
+
     public Usuario obtenerUsuario(String user, String contraseña){ //devuelve el usuario
         Iterator<Usuario>iterator= listadoUsuarios.iterator();
         Usuario rta=new Usuario();
@@ -112,6 +118,7 @@ public class GestorUsuario {
         }
         return rta;
     }
+
     public boolean buscarUserName(String user) //Devuele true si existe usuario en el sistema
     {
         Iterator<Usuario>iterator= listadoUsuarios.iterator();
@@ -124,16 +131,18 @@ public class GestorUsuario {
         }
         return rta;
     }
+
     private UsuarioJson convertirAUsuarioJSON(Usuario usuario) {
     UsuarioJson usuarioJSON = new UsuarioJson();
     usuarioJSON.setUsername(usuario.getUsername());
     usuarioJSON.setContraseña(usuario.getContraseña());
 
-    if (usuario instanceof USecretaria) {
-        usuarioJSON.setTipo("Secretaria");
-        USecretaria u=(USecretaria) usuario;
-        usuarioJSON.setDni(u.getSecretaria().getDni());
-    } else if (usuario instanceof UMedico) {
+        if (usuario instanceof USecretaria) {
+            usuarioJSON.setTipo("Secretaria");
+            USecretaria u = (USecretaria) usuario;
+            Secretaria secretaria = u.getSecretaria();
+            usuarioJSON.setDni(secretaria.getDni());
+        } else if (usuario instanceof UMedico) {
         usuarioJSON.setTipo("Medico");
         UMedico m=(UMedico) usuario;
         usuarioJSON.setNroMatricula(m.getMedico().getMatricula());

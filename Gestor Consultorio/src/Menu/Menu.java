@@ -2,6 +2,7 @@ package Menu;
 
 import Medico.GestorMedico;
 import Paciente.GestorPaciente;
+import Secretaria.GestorSecretaria;
 import Usuario.GestorUsuario;
 import Usuario.Usuario;
 import Usuario.UPaciente;
@@ -13,12 +14,14 @@ public class Menu {
     private GestorUsuario usuarios;
     private GestorPaciente pacientes;
     private GestorMedico medicos;
+    private GestorSecretaria secretarias;
     //
     public Menu() {
         this.scanner=new Scanner(System.in);
         this.usuarios=new GestorUsuario();
         this.pacientes=new GestorPaciente();
         this.medicos=new GestorMedico();
+        this.secretarias=new GestorSecretaria();
     }
 
     public Menu(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos) {
@@ -37,13 +40,14 @@ public class Menu {
     public void menuPrincipal() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t4-Mostrar todos los medicos \n\t0- Finalizar Programa\n";
+        String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t4-Mostrar todos los medicos \n\t5-Mostrar todos los pacientes \n\t6-Mostrar todas las secretarias \n\t0- Finalizar Programa\n";
         int opc;
         this.pacientes.leerPaciente();
         this.medicos.leerListado();
-        this.usuarios.leerUsuarios(pacientes,medicos);
+        this.secretarias.leerListado();
+        this.usuarios.leerUsuarios(pacientes,medicos,secretarias);
         MenuMedico menuMedico=new MenuMedico(scanner,usuarios,pacientes,medicos);
-        MenuPaciente menuPaciente=new MenuPaciente(scanner,usuarios,pacientes,medicos);
+        MenuPaciente menuPaciente=new MenuPaciente(scanner,usuarios,pacientes,medicos,secretarias);
         do {
             System.out.println(menu);
 
@@ -72,6 +76,12 @@ public class Menu {
                     break;
                 case 4:
                     System.out.println(medicos.mostrarMedicos());
+                    break;
+                case 5:
+                    pacientes.mostrarPacientes();
+                    break;
+                case 6:
+                    secretarias.mostrarSecretarias();
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");

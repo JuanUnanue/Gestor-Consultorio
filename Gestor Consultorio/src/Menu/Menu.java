@@ -1,12 +1,20 @@
 package Menu;
 
+import Medico.Agenda;
 import Medico.GestorMedico;
 import Paciente.GestorPaciente;
+import Paciente.Paciente;
 import Secretaria.GestorSecretaria;
+import Turno.Turno;
 import Usuario.GestorUsuario;
 import Usuario.Usuario;
+import Usuario.UMedico;
 import Usuario.UPaciente;
-import java.util.Scanner;
+import Usuario.USecretaria;
+
+import java.time.DayOfWeek;
+import java.util.*;
+
 import Usuario.UAdmin;
 
 public class Menu {
@@ -15,6 +23,7 @@ public class Menu {
     private GestorPaciente pacientes;
     private GestorMedico medicos;
     private GestorSecretaria secretarias;
+    private HashMap<String,ArrayList<Paciente>> presentes;
     //
     public Menu() {
         this.scanner=new Scanner(System.in);
@@ -22,14 +31,16 @@ public class Menu {
         this.pacientes=new GestorPaciente();
         this.medicos=new GestorMedico();
         this.secretarias=new GestorSecretaria();
+        this.presentes=new HashMap<>();
     }
-
-    public Menu(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos) {
+    public Menu(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos, HashMap<String,ArrayList<Paciente>>presentes) {
         this.scanner = scanner;
         this.usuarios = usuarios;
         this.pacientes = pacientes;
         this.medicos = medicos;
+        this.presentes = presentes;
     }
+
 
     public GestorPaciente getPacientes() {
         return pacientes;
@@ -46,8 +57,9 @@ public class Menu {
         this.medicos.leerListado();
         this.secretarias.leerListado();
         this.usuarios.leerUsuarios(pacientes,medicos,secretarias);
-        MenuMedico menuMedico=new MenuMedico(scanner,usuarios,pacientes,medicos);
-        MenuPaciente menuPaciente=new MenuPaciente(scanner,usuarios,pacientes,medicos,secretarias);
+        MenuMedico menuMedico=new MenuMedico(scanner,usuarios,pacientes,medicos,presentes);
+        MenuPaciente menuPaciente=new MenuPaciente(scanner,usuarios,pacientes,medicos,secretarias,presentes);
+        MenuSecretaria menuSecretaria=new MenuSecretaria(scanner,usuarios,pacientes,medicos,secretarias,presentes);
         do {
             System.out.println(menu);
 
@@ -65,6 +77,10 @@ public class Menu {
                    }else if (user instanceof UAdmin){
                        System.out.println("que sera este user jaja");
                        menuMedico.menuADMINMedicos();
+                   }else if(user instanceof USecretaria){
+                       menuSecretaria.menuPrincipal();
+                   } else if (user instanceof UMedico) {
+                       menuMedico.menuPrincipal(((UMedico) user).getMedico());
                    }
 
                     break;
@@ -147,10 +163,36 @@ public class Menu {
 
     }
     ///
-
+    public DayOfWeek seleccionDiaDisponible(Agenda agenda){
+        Iterator<Map.Entry<DayOfWeek, HashSet<Turno>>> entryIterator=agenda.getTurnos().entrySet().iterator();
+        ArrayList<DayOfWeek>diasDispo=new ArrayList<>();
+        while (entryIterator.hasNext()){
+            Map.Entry<DayOfWeek, HashSet<Turno>>entry=entryIterator.next();
+            diasDispo.add(entry.getKey());
+        }
+        System.out.println("Seleccione el dia: ");
+        for(int i=0;i<diasDispo.size();i++){
+            System.out.println((i+1+". "+diasDispo.get(i)));
+        }
+        int opcion=0;
+        do{
+            System.out.print("Ingrese el número del dia: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            if (opcion < 1 || opcion > diasDispo.size()) {
+                System.out.println("Opción inválida. Intente nuevamente.");
+            }
+        }while (opcion < 1 || opcion > diasDispo.size());
+        return diasDispo.get(opcion-1);
+    }
     ///
-
-
+    public void agregarPresente(String apellidoMedico, Paciente paciente) {
+        if (!presentes.containsKey(apellidoMedico)) {
+            presentes.put(apellidoMedico, new ArrayList<>());
+        }
+        ArrayList<Paciente> listaPacientes = presentes.get(apellidoMedico);
+        listaPacientes.add(paciente);
+    }
 }
 
 

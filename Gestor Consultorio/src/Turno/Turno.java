@@ -81,7 +81,7 @@ public class Turno  implements Serializable{
         String fechaFormateada = fechaHora.format(formatter);
         return "Turno{" +
                 "paciente=" + dniPaciente +
-              /*  ", medico=" + medico +*/
+              ", medico=" + matriculaMedico +
                 ", fechaHora=" + fechaFormateada +
                 ", disponible=" + disponible +
                 '}'+"\n";

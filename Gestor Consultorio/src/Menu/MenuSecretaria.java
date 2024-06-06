@@ -1,67 +1,69 @@
 package Menu;
-import Medico.Medico;
-import Modelo.Especialidad;
-import Secretaria.GestorSecretaria;
-import Turno.Turno;
-import Usuario.UPaciente;
+
 import Medico.GestorMedico;
+import Medico.Medico;
 import Modelo.Direccion;
+import Modelo.Especialidad;
 import Paciente.GestorPaciente;
 import Paciente.Paciente;
+import Secretaria.GestorSecretaria;
+import Turno.Turno;
 import Usuario.GestorUsuario;
-
+import Usuario.Usuario;
+import Medico.Agenda;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import Medico.Agenda;
-public class MenuPaciente extends Menu{
+
+public class MenuSecretaria extends Menu{
     private Scanner scanner;
     private GestorUsuario usuarios;
     private GestorPaciente pacientes;
     private GestorMedico medicos;
     private GestorSecretaria secretarias;
-    private UPaciente user;
     private HashMap<String,ArrayList<Paciente>> presentes;
     ////
-    public MenuPaciente(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos,GestorSecretaria secretarias, HashMap<String,ArrayList<Paciente>>presentes) {
+    public MenuSecretaria(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos, GestorSecretaria secretarias,HashMap<String,ArrayList<Paciente>>presentes) {
         this.scanner = scanner;
         this.usuarios = usuarios;
         this.pacientes = pacientes;
         this.medicos = medicos;
         this.presentes = presentes;
-        this.user=new UPaciente();
         this.secretarias=secretarias;
     }
 
-    public void setUser(UPaciente user) {
-        this.user = user;
+    public MenuSecretaria() {
     }
 
-    public void menuPrincipal(UPaciente paciente) {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        setUser(paciente);
-        String menu = "\n \t1- Turnos\n\t2- \n\t 3-\n\t8-Mostrar Todos\n\t0- Salir al menu principal\n";
+
+    ///////
+
+    @Override
+    public void menuPrincipal() {
+        String menu = "\n \t1-Crear Paciente\n\t2-Presente\n\t 3-Dar un turno\n\t0- Salir al menu principal.\n";
         int opc;
         do {
             System.out.println(menu);
 
-            opc = scanner.nextInt();
-            scanner.nextLine();
+            opc = this.scanner.nextInt();
             switch (opc) {
                 case 0:
-                    System.out.println("Saliendo al menu principal");
+                    System.out.println("Saliendo del menu principal");
+                    System.out.print("\033[H\033[2J");
                     break;
                 case 1:
-                    sacarTurno(user.getPaciente());
+                    crearPaciente();
+                    break;
+                case 2:
+                    darPresente();
                     break;
                 case 3:
-
+                    Paciente paciente=verificarDNI();
+                    sacarTurno(paciente);
                     break;
-                case 8:
-                    pacientes.mostrarPacientes();
+                case 4:
+
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");
@@ -69,38 +71,28 @@ public class MenuPaciente extends Menu{
         } while (opc != 0);
     }
 
-    //////////////////////////////////////////////////////////
-    public void menuADMINPacientes() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        String menu = "\n \t1- Crear Paciente\n\t2-Mostrar Pacientes \n\t 3-Turnos\n\t8-Mostrar Todos\n\t0- Salir al menu principal\n";
-        int opc;
-        do {
-            System.out.println(menu);
-
-            opc = scanner.nextInt();
-            scanner.nextLine();
-
-            switch (opc) {
-                case 0:
-                    System.out.println("Saliendo al menu principal");
-                    break;
-                case 1:
-                    crearUsuario();
-                    break;
-                case 3:
-
-                    break;
-                case 8:
-                    pacientes.mostrarPacientes();
-                    break;
-                default:
-                    System.out.println("Ingrese una opcion valida");
-            }
-        } while (opc != 0);
+    @Override
+    public void menuADMIN() {
+        super.menuADMIN();
     }
 
-    public Paciente crearPaciente(int dni){
+    @Override
+    public Usuario inicioSesion() {
+        return super.inicioSesion();
+    }
+
+    public void crearPaciente() {
+        int dni=0;
+        boolean rta=true;
+        while (rta) {
+            System.out.println("Ingrese D.N.I: ");
+            dni = scanner.nextInt();
+            scanner.nextLine();
+            rta = pacientes.buscarDNI(dni);
+            if (rta) {
+                System.out.println("Ya existe un paciente con ese dni. Intente nuevamente.");
+            }
+        }
         System.out.println("Ingrese Nombre: ");
         String nombre=scanner.nextLine();
         System.out.println("Ingrese Apellido: ");
@@ -122,58 +114,8 @@ public class MenuPaciente extends Menu{
         System.out.println("Ingrese Ciudad: ");
         String ciudad=scanner.nextLine();
         Paciente aux=new Paciente(nombre,apellido, LocalDate.of(año,mes,dia),dni,new Direccion(calle,nro,ciudad));
-        System.out.println(pacientes.agregarPaciente(aux));
-        return aux;
-    }
-
-    public void crearUsuario() {
-        int dni=0;
-        Paciente paciente=new Paciente();
-        System.out.println("Ingrese D.N.I: ");
-        dni=scanner.nextInt();
-        scanner.nextLine();
-        boolean rta=pacientes.buscarDNI(dni);
-        if (!rta){
-            paciente=crearPaciente(dni);
-        }else {
-            paciente=pacientes.buscarPaciente(dni);
-            System.out.println("Bienvenido de vuelta "+paciente.getNombre()+".");
-        }
-        boolean flag=true;
-        String user="";
-        while (flag){
-            System.out.println("Ingrese userName: ");
-            user=scanner.next();
-            scanner.nextLine();
-            boolean rta2=usuarios.buscarUserName(user);
-            if (!rta2){
-                flag=false;
-            }else {
-                System.out.println("Ese userName ya existe. Intente nuevamente");
-            }
-        }
-        System.out.println("Ingrese contraseña: ");
-        String contraseña=scanner.next();
-        scanner.nextLine();
-        System.out.println(usuarios.agregarUsuario(new UPaciente(user,contraseña,paciente)));
-    }
-    public Especialidad mostrarYelegirEspecialidad(){
-        System.out.println("Seleccione una especialidad:");
-        Especialidad especialidadElegida = null;
-        for (Especialidad especialidad : Especialidad.values()) {
-            System.out.println((especialidad.ordinal() + 1) + ". " + especialidad);
-        }
-        System.out.print("Ingrese el número correspondiente a la especialidad deseada: ");
-        int opcion = scanner.nextInt();
-        scanner.nextLine();
-
-        if (opcion >= 1 && opcion <= Especialidad.values().length) {
-            especialidadElegida = Especialidad.values()[opcion - 1];
-            System.out.println("Especialidad seleccionada: " + especialidadElegida);
-        } else {
-            System.out.println("Opción inválida. Por favor, ingrese un número válido.");
-        }
-        return especialidadElegida;
+        String string=pacientes.agregarPaciente(aux);
+        System.out.println(string);
     }
 
     public Medico buscarElegirMedico(){
@@ -203,12 +145,12 @@ public class MenuPaciente extends Menu{
     }
 
     public Medico seleccionarMedico(HashSet<Medico>listado){
-    ArrayList<Medico> listaMedicos=new ArrayList<>(listado);
-    System.out.println("Seleccione un médico:");
-    for(int i=0;i< listaMedicos.size();i++){
-        Medico medico = listaMedicos.get(i);
-        System.out.println((i + 1) + ". " + medico.getNombre() + " " + medico.getApellido());
-    }
+        ArrayList<Medico> listaMedicos=new ArrayList<>(listado);
+        System.out.println("Seleccione un médico:");
+        for(int i=0;i< listaMedicos.size();i++){
+            Medico medico = listaMedicos.get(i);
+            System.out.println((i + 1) + ". " + medico.getNombre() + " " + medico.getApellido());
+        }
         int opcion;
         do {
             System.out.print("Ingrese el número del médico: ");
@@ -223,27 +165,41 @@ public class MenuPaciente extends Menu{
         return medicoSeleccionado;
     }
 
-    public void sacarTurno(Paciente paciente){
+    public void darPresente(){
         Medico medico=buscarElegirMedico();
         Agenda agenda=medico.getAgenda();
+        ArrayList<Paciente>arrayList=new ArrayList<>();
         DayOfWeek diaSemana=seleccionDiaDisponible(agenda);
         System.out.println("Estos son los turnos disponibles :");
-        HashMap<LocalDate,HashSet<Turno>> turnosDisponibles=obtenerTurnosDisponibles(agenda.getTurnos().get(diaSemana));
-        Iterator<Map.Entry<LocalDate,HashSet<Turno>>>entryIterator=turnosDisponibles.entrySet().iterator();
+        HashMap<LocalDate, HashSet<Turno>> turnosDisponibles=obtenerTurnosOcupados(agenda.getTurnos().get(diaSemana));
+        Iterator<Map.Entry<LocalDate,HashSet<Turno>>> entryIterator=turnosDisponibles.entrySet().iterator();
         LocalDate diaElegido=seleccionDiaTurno(turnosDisponibles);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String fechaFormateada = diaElegido.format(formatter);
         System.out.println("Dia elegido: "+fechaFormateada);
         HashSet<Turno>turnosDelDia=turnosDisponibles.get(diaElegido);
         Turno turno=elegirTurnoDelDia(turnosDelDia,fechaFormateada);
-        turno.setDisponible(false);
-        int dniPaciente = paciente.getDni();
-        System.out.println("DNI del paciente: " + dniPaciente);
-        turno.setDniPaciente(dniPaciente);
-        paciente.agregarTurno(turno);
-        System.out.println(turno);
-
+        if(presentes.containsKey(medicos.buscarMedico(turno.getMatriculaMedico()).getApellido())){
+            arrayList=presentes.get(medicos.buscarMedico(turno.getMatriculaMedico()).getApellido());
+        }else {
+            presentes.put(medicos.buscarMedico(turno.getMatriculaMedico()).getApellido(),arrayList);
+        }
+        arrayList.add(pacientes.buscarPaciente(turno.getPaciente()));
+        System.out.println("Presente "+presentes);
     }
+
+    public HashMap<LocalDate, HashSet<Turno>> obtenerTurnosOcupados(HashSet<Turno> turnosDispo) {
+        HashMap<LocalDate, HashSet<Turno>> entryMap = new HashMap<>();
+        for (Turno turno : turnosDispo) {
+            if (!turno.isDisponible()) {
+                LocalDate diaSinHora = turno.getFechaHora().toLocalDate();
+                entryMap.putIfAbsent(diaSinHora, new HashSet<>());
+                entryMap.get(diaSinHora).add(turno);
+            }
+        }
+        return entryMap;
+    }
+
     public HashMap<LocalDate, HashSet<Turno>> obtenerTurnosDisponibles(HashSet<Turno> turnosDispo) {
         HashMap<LocalDate, HashSet<Turno>> entryMap = new HashMap<>();
         for (Turno turno : turnosDispo) {
@@ -254,29 +210,6 @@ public class MenuPaciente extends Menu{
             }
         }
         return entryMap;
-    }
-
-    public DayOfWeek seleccionDiaDisponible(Agenda agenda){
-        Iterator<Map.Entry<DayOfWeek, HashSet<Turno> >> entryIterator=agenda.getTurnos().entrySet().iterator();
-        ArrayList<DayOfWeek>diasDispo=new ArrayList<>();
-        while (entryIterator.hasNext()){
-            Map.Entry<DayOfWeek, HashSet<Turno>>entry=entryIterator.next();
-            diasDispo.add(entry.getKey());
-        }
-        System.out.println("Seleccione el dia: ");
-        for(int i=0;i<diasDispo.size();i++){
-            System.out.println((i+1+". "+diasDispo.get(i)));
-        }
-        int opcion=0;
-        do{
-            System.out.print("Ingrese el número del dia: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine();
-            if (opcion < 1 || opcion > diasDispo.size()) {
-                System.out.println("Opción inválida. Intente nuevamente.");
-            }
-        }while (opcion < 1 || opcion > diasDispo.size());
-     return diasDispo.get(opcion-1);
     }
 
     public LocalDate seleccionDiaTurno(HashMap<LocalDate, HashSet<Turno>> turnos) {
@@ -306,25 +239,61 @@ public class MenuPaciente extends Menu{
     }
 
     public Turno elegirTurnoDelDia(HashSet<Turno> turnosDispo,String dia){
-        ArrayList<Turno> turnos=new ArrayList<>(turnosDispo);
+        ArrayList<Turno> aux=new ArrayList<>(turnosDispo);
         System.out.println("Estos son los turnos disponibles para el "+dia);
-        for (int i=0;i< turnos.size();i++){
-            System.out.println((i+1+". "+turnos.get(i)));
+        for (int j=0;j< aux.size();j++){
+            System.out.println((j+1+". "+aux.get(j)));
         }
         int opcion=0;
         do{
             System.out.print("Ingrese el número del dia: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
-            if (opcion < 1 || opcion > turnos.size()) {
+            if (opcion < 1 || opcion > aux.size()) {
                 System.out.println("Opción inválida. Intente nuevamente.");
             }
-        }while (opcion < 1 || opcion > turnos.size());
-        return turnos.get(opcion-1);
+        }while (opcion < 1 || opcion > aux.size());
+        return aux.get(opcion-1);
     }
 
-    @Override
-    public void agregarPresente(String apellidoMedico, Paciente paciente) {
-        super.agregarPresente(apellidoMedico, paciente);
+    public void sacarTurno(Paciente paciente){
+        Medico medico=buscarElegirMedico();
+        Agenda agenda=medico.getAgenda();
+        DayOfWeek diaSemana=seleccionDiaDisponible(agenda);
+        System.out.println("Estos son los turnos disponibles :");
+        HashMap<LocalDate,HashSet<Turno>> turnosDisponibles=obtenerTurnosDisponibles(agenda.getTurnos().get(diaSemana));
+        Iterator<Map.Entry<LocalDate,HashSet<Turno>>>entryIterator=turnosDisponibles.entrySet().iterator();
+        LocalDate diaElegido=seleccionDiaTurno(turnosDisponibles);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String fechaFormateada = diaElegido.format(formatter);
+        System.out.println("Dia elegido: "+fechaFormateada);
+        HashSet<Turno>turnosDelDia=turnosDisponibles.get(diaElegido);
+        Turno turno=elegirTurnoDelDia(turnosDelDia,fechaFormateada);
+        turno.setDisponible(false);
+        int dniPaciente = paciente.getDni();
+        System.out.println("DNI del paciente: " + dniPaciente);
+        turno.setDniPaciente(dniPaciente);
+        paciente.agregarTurno(turno);
+        System.out.println(turno);
+
+    }
+
+    public Paciente verificarDNI(){
+        int dni=0;
+        boolean rta=false;
+        Paciente paciente=new Paciente();
+        while (!rta) {
+            System.out.println("Ingrese D.N.I: ");
+            dni = scanner.nextInt();
+            scanner.nextLine();
+            rta = pacientes.buscarDNI(dni);
+            if (rta) {
+                paciente=pacientes.buscarPaciente(dni);
+                System.out.println("Paciente: "+paciente.getApellido()+" "+paciente.getNombre());
+            }else {
+                System.out.println("No existe un paciente registrado con ese dni. Intente nuevamente.");
+            }
+        }
+        return paciente;
     }
 }

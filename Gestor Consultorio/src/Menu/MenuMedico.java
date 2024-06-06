@@ -5,6 +5,7 @@ import Medico.Medico;
 import Modelo.Direccion;
 import Modelo.Especialidad;
 import Paciente.GestorPaciente;
+import Paciente.Paciente;
 import Usuario.GestorUsuario;
 import Medico.Agenda;
 import Usuario.UMedico;
@@ -13,31 +14,54 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class MenuMedico extends Menu{
     private Scanner scanner;
     private GestorUsuario usuarios;
     private GestorPaciente pacientes;
     private GestorMedico medicos;
-    //
-
-    public MenuMedico() {
-    }
-
-    public MenuMedico(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos) {
+    private HashMap<String,ArrayList<Paciente>> presentes;
+    ////
+    public MenuMedico(Scanner scanner, GestorUsuario usuarios, GestorPaciente pacientes, GestorMedico medicos, HashMap<String,ArrayList<Paciente>>presentes) {
         this.scanner = scanner;
         this.usuarios = usuarios;
         this.pacientes = pacientes;
         this.medicos = medicos;
+        this.presentes = presentes;
+    }
+    public MenuMedico() {
     }
     /////
 
-    @Override
-    public void menuPrincipal() {
+    public void menuPrincipal(Medico medico) {
+        String menu = "\n \t1-Atender Paciente\n\t\n\t \n\t0- Salir al menu principal.\n";
+        int opc;
+        do {
+            System.out.println(menu);
+
+            opc = this.scanner.nextInt();
+            switch (opc) {
+                case 0:
+                    System.out.println("Saliendo del menu principal");
+                    System.out.print("\033[H\033[2J");
+                    break;
+                case 1:
+                    atenderPaciente(medico);
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                default:
+                    System.out.println("Ingrese una opcion valida");
+            }
+        } while (opc != 0);
 
     }
 
@@ -84,6 +108,7 @@ public class MenuMedico extends Menu{
             }
         } while (opc != 0);
     }
+
     public String crearMedico(){
         String rta="";
         boolean flag=true;
@@ -130,6 +155,7 @@ public class MenuMedico extends Menu{
         rta+=medicos.agregarMedico(medico);
         return rta;
     }
+
     public Especialidad mostrarYelegirEspecialidad(){
         System.out.println("Seleccione una especialidad:");
         Especialidad especialidadElegida = null;
@@ -148,6 +174,7 @@ public class MenuMedico extends Menu{
         }
         return especialidadElegida;
     }
+
     public DayOfWeek mostrarYelegirDiaSemana(){
         System.out.println("Seleccione un día de la semana:");
         DayOfWeek diaElegido = null;
@@ -167,6 +194,7 @@ public class MenuMedico extends Menu{
 
         return diaElegido;
     }
+
     public Medico validarMatricula(){
         boolean flag=false;
         int matricula=0;
@@ -247,6 +275,7 @@ public class MenuMedico extends Menu{
         }
         return opcion;
     }
+
     public void generarUsuario(int matricula){
         boolean rta=true;
         String username="";
@@ -264,6 +293,37 @@ public class MenuMedico extends Menu{
         String pass=scanner.nextLine();
         UMedico user=new UMedico(username,pass,medicos.buscarMedico(matricula));
         usuarios.agregarUsuario(user);
+    }
+
+    public void atenderPaciente(Medico medico){
+        ArrayList<Paciente>pacientes=presentes.get(medico.getApellido());
+        for(int i=0;i<pacientes.size();i++){
+            System.out.println((i+1+". "+pacientes.get(i)));
+        }
+        int opcion=0;
+        do{
+            System.out.print("Ingrese el número del dia: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            if (opcion < 1 || opcion > pacientes.size()) {
+                System.out.println("Opción inválida. Intente nuevamente.");
+            }
+        }while (opcion < 1 || opcion > pacientes.size());
+        System.out.println("Atendiendo a "+pacientes.get(opcion-1).getNombre()+" "+pacientes.get(opcion-1).getApellido()+" wuauuuuuu");
+        eliminarPresente(medico.getApellido(),pacientes.get(opcion-1));
+    }
+    public void eliminarPresente(String apellidoMedico,Paciente paciente) {
+        if (presentes.containsKey(apellidoMedico)) {
+            ArrayList<Paciente> listaPacientes = presentes.get(apellidoMedico);
+            Iterator<Paciente> iterator = listaPacientes.iterator();
+            while (iterator.hasNext()) {
+                Paciente aux = iterator.next();
+                if (aux.equals(paciente)) {
+                    iterator.remove();
+                    System.out.println("Paciente eliminado: " + paciente.getNombre() + " " + paciente.getApellido());
+                }
+            }
+        }
     }
     /*
     public void modificarMedico(Medico medico){

@@ -164,4 +164,13 @@ public class GestorUsuario {
             }
         }
     }
+    public void eliminarUPacientes(){
+        Iterator<Usuario> iterator = listadoUsuarios.iterator();
+        while (iterator.hasNext()) {
+            Usuario usuario = iterator.next();
+            if (usuario instanceof UPaciente) {
+                iterator.remove();
+            }
+        }
+    }
 }

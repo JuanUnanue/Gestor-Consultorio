@@ -185,6 +185,7 @@ public class MenuSecretaria extends Menu{
             presentes.put(medicos.buscarMedico(turno.getMatriculaMedico()).getApellido(),arrayList);
         }
         arrayList.add(pacientes.buscarPaciente(turno.getPaciente()));
+        agenda.borrarTurno(diaSemana,turno);
         System.out.println("Presente "+presentes);
     }
 

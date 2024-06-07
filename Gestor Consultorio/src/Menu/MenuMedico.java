@@ -6,6 +6,7 @@ import Modelo.Direccion;
 import Modelo.Especialidad;
 import Paciente.GestorPaciente;
 import Paciente.Paciente;
+import Turno.Turno;
 import Usuario.GestorUsuario;
 import Medico.Agenda;
 import Usuario.UMedico;
@@ -35,7 +36,7 @@ public class MenuMedico extends Menu{
     /////
 
     public void menuPrincipal(Medico medico) {
-        String menu = "\n \t1-Atender Paciente\n\t\n\t \n\t0- Salir al menu principal.\n";
+        String menu = "\n \t1-Atender Paciente\n\t2-Buscar Paciente\n\t \n\t0- Salir al menu principal.\n";
         int opc;
         do {
             System.out.println(menu);
@@ -50,7 +51,7 @@ public class MenuMedico extends Menu{
                     atenderPaciente(medico);
                     break;
                 case 2:
-
+                    buscarPaciente();
                     break;
                 case 3:
 
@@ -92,7 +93,7 @@ public class MenuMedico extends Menu{
                 case 2:
                     matricula=mostrarYelegirMatricula();
                     medico=this.medicos.buscarMedico(matricula);
-                    System.out.println("Perfecto! Comenzemos con la inicializacion para el Dr. "+medico.getApellido()+".");
+                    System.out.println("Perfecto! Comenzemos con la inicializacion de turnos para el Dr. "+medico.getApellido()+".");
                     inicializadorTurnos(medico);
                     break;
                 case 3:
@@ -302,7 +303,7 @@ public class MenuMedico extends Menu{
         }
         int opcion=0;
         do{
-            System.out.print("Ingrese el número del dia: ");
+            System.out.print("Ingrese el paciente: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
             if (opcion < 1 || opcion > pacientes.size()) {
@@ -310,8 +311,67 @@ public class MenuMedico extends Menu{
             }
         }while (opcion < 1 || opcion > pacientes.size());
         System.out.println("Atendiendo a "+pacientes.get(opcion-1).getNombre()+" "+pacientes.get(opcion-1).getApellido()+" wuauuuuuu");
+        cargarHistoriaClinica(medico,pacientes.get(opcion-1));
         eliminarPresente(medico.getApellido(),pacientes.get(opcion-1));
     }
+    public void cargarHistoriaClinica(Medico medico,Paciente paciente){
+        HashMap<Especialidad,String>historia=paciente.getHistoriaClinica();
+        String string="";
+        if(historia.containsKey(medico.getEspecialidad())){
+            string+= historia.get(medico.getEspecialidad());
+        }
+        string+="\nAtendido por el Dr. "+medico.getApellido()+" . ";
+        System.out.println("Ingrese las observaciones de la consulta: ");
+        string+=scanner.nextLine();
+        System.out.println("terminando consulta.");
+        historia.put(medico.getEspecialidad(),string);
+    }
+    public void buscarPaciente(){
+        int dni=0;
+        boolean rta=false;
+        Paciente paciente=new Paciente();
+        while (!rta) {
+            System.out.println("Ingrese D.N.I del paciente a buscar: ");
+            dni = scanner.nextInt();
+            scanner.nextLine();
+            rta = pacientes.buscarDNI(dni);
+            if (rta) {
+                paciente=pacientes.buscarPaciente(dni);
+                System.out.println("Paciente encontrado:  "+paciente.getNombre()+" "+paciente.getApellido()+".");
+                verHistoriaClinica(paciente.getHistoriaClinica());
+                System.out.println("Desea buscar otro paciente? \n\t 1. Si            2. No, salir");
+                int opc=scanner.nextInt();
+                scanner.nextLine();
+                if(opc==1){
+                    rta=false;
+                }
+            }else {
+                System.out.println("No existe un paciente con ese dni. Intente nuevamente.");
+            }
+        }
+    }
+    public void verHistoriaClinica(HashMap<Especialidad,String> historiaClinica){
+        Iterator<Map.Entry<Especialidad,String>>entryIterator=historiaClinica.entrySet().iterator();
+        ArrayList<Especialidad>especialidades=new ArrayList<>();
+        while (entryIterator.hasNext()){
+            Map.Entry<Especialidad,String>entry=entryIterator.next();
+            especialidades.add((entry.getKey()));
+        }
+        for(int i=0;i< especialidades.size();i++){
+            System.out.println((i+1+". "+especialidades.get(i)));
+        }
+        int opcion=0;
+        do{
+            System.out.print("Ingrese la especialidad: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            if (opcion < 1 || opcion > especialidades.size()) {
+                System.out.println("Opción inválida. Intente nuevamente.");
+            }
+        }while (opcion < 1 || opcion > especialidades.size());
+        System.out.println(historiaClinica.get(especialidades.get(opcion-1)));
+    }
+
     public void eliminarPresente(String apellidoMedico,Paciente paciente) {
         if (presentes.containsKey(apellidoMedico)) {
             ArrayList<Paciente> listaPacientes = presentes.get(apellidoMedico);

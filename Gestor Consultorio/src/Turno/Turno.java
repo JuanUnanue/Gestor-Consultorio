@@ -6,6 +6,7 @@ import Paciente.Paciente;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Turno  implements Serializable{
     private int dniPaciente;
@@ -73,6 +74,18 @@ public class Turno  implements Serializable{
 
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Turno turno)) return false;
+        return dniPaciente == turno.dniPaciente && matriculaMedico == turno.matriculaMedico && disponible == turno.disponible && Objects.equals(fechaHora, turno.fechaHora);
+    }
+
+    @Override
+    public int hashCode() {
+        return 10;
     }
 
     @Override

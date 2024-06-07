@@ -28,6 +28,7 @@ public class Paciente extends Persona implements Serializable {
     public void agregarTurno(Turno turno){
         this.historialTurnos.add(turno);
     }
+
     public HashMap<Especialidad, String> getHistoriaClinica() {
         return historiaClinica;
     }
@@ -51,6 +52,6 @@ public class Paciente extends Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Paciente{ " + super.getNombre()+" "+super.getApellido()+" "+", dni= "+super.getDni()+"  }";
+        return "Paciente{ " + super.getNombre()+" "+super.getApellido()+" "+", dni= "+super.getDni()+" "+",histoia clinica= "+historiaClinica +" }";
     }
 }

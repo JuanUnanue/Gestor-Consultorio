@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class Agenda implements Serializable,IGestorTurno {
     private static final long serialVersionUID =  1092635162470550007L;
@@ -31,6 +32,18 @@ public class Agenda implements Serializable,IGestorTurno {
         this.turnos = turnos;
     }
 
+    public void borrarTurno(DayOfWeek dia,Turno turno){
+        if(turnos.containsKey(dia)){
+            HashSet<Turno>hashSetTurnos=turnos.get(dia);
+            Iterator<Turno>iterator= hashSetTurnos.iterator();
+            while (iterator.hasNext()){
+                Turno aux=iterator.next();
+                if(aux.equals(turno)){
+                    iterator.remove();
+                }
+            }
+        }
+    }
     @Override
     public String toString() {
         return "AgendaMedico{" +

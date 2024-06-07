@@ -301,22 +301,26 @@ public class MenuMedico extends Menu{
     }
 
     public void atenderPaciente(Medico medico){
-        ArrayList<Paciente>pacientes=presentes.get(medico.getApellido());
-        for(int i=0;i<pacientes.size();i++){
-            System.out.println((i+1+". "+pacientes.get(i)));
-        }
-        int opcion=0;
-        do{
-            System.out.print("Ingrese el paciente: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine();
-            if (opcion < 1 || opcion > pacientes.size()) {
-                System.out.println("Opción inválida. Intente nuevamente.");
-            }
-        }while (opcion < 1 || opcion > pacientes.size());
-        System.out.println("Atendiendo a "+pacientes.get(opcion-1).getNombre()+" "+pacientes.get(opcion-1).getApellido()+" wuauuuuuu");
-        cargarHistoriaClinica(medico,pacientes.get(opcion-1));
-        eliminarPresente(medico.getApellido(),pacientes.get(opcion-1));
+       if(!presentes.get(medico.getApellido()).isEmpty()) {
+           ArrayList<Paciente> pacientes = presentes.get(medico.getApellido());
+           for (int i = 0; i < pacientes.size(); i++) {
+               System.out.println((i + 1 + ". " + pacientes.get(i)));
+           }
+           int opcion = 0;
+           do {
+               System.out.print("Ingrese el paciente: ");
+               opcion = scanner.nextInt();
+               scanner.nextLine();
+               if (opcion < 1 || opcion > pacientes.size()) {
+                   System.out.println("Opción inválida. Intente nuevamente.");
+               }
+           } while (opcion < 1 || opcion > pacientes.size());
+           System.out.println("Atendiendo a " + pacientes.get(opcion - 1).getNombre() + " " + pacientes.get(opcion - 1).getApellido());
+           cargarHistoriaClinica(medico, pacientes.get(opcion - 1));
+           eliminarPresente(medico.getApellido(), pacientes.get(opcion - 1));
+       }else {
+           System.out.println("No tiene pacientes en la sala de espera");
+       }
     }
 
     public void cargarHistoriaClinica(Medico medico,Paciente paciente){
@@ -387,13 +391,9 @@ public class MenuMedico extends Menu{
                 Paciente aux = iterator.next();
                 if (aux.equals(paciente)) {
                     iterator.remove();
-                    System.out.println("Paciente eliminado: " + paciente.getNombre() + " " + paciente.getApellido());
+                    System.out.println("Paciente atendido: " + paciente.getNombre() + " " + paciente.getApellido());
                 }
             }
         }
     }
-    /*
-    public void modificarMedico(Medico medico){
-    }
-    */
 }

@@ -76,7 +76,7 @@ public class MenuSecretaria extends Menu{
     public void menuADMINsecretaria() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        String menu = "\n \t1- Crear Secretaria\n\t2-Eliminar Secretaria \n\t 3-Mostrar todos\n\t0- Salir al menu principal\n";
+        String menu = "\n \t1- Crear Secretaria\n\t2-Eliminar Secretaria \n\t3-Mostrar todos\n\t0- Salir al menu principal\n";
         int opc;
         do {
             System.out.println(menu);

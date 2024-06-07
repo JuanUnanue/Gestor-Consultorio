@@ -161,15 +161,6 @@ public class GestorUsuario extends GestorInformacion {
             }
         }
     }
-    public void eliminarUSecretaria(){
-        Iterator<Usuario> iterator = listadoUsuarios.iterator();
-        while (iterator.hasNext()) {
-            Usuario usuario = iterator.next();
-            if (usuario instanceof USecretaria) {
-                iterator.remove();
-            }
-        }
-    }
 
     @Override
     public boolean eliminar(Object obj) {

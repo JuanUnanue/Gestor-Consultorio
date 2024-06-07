@@ -22,6 +22,6 @@ public class UPaciente extends Usuario implements Serializable {
     public String toString() {
         return "UPaciente{" + super.toString()+
                 "paciente=" + paciente +
-                '}';
+                '}'+"\n";
     }
 }

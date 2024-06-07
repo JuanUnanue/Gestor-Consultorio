@@ -24,6 +24,6 @@ public class UMedico extends Usuario implements Serializable {
     public String toString() {
         return "UMedico{" +
                 "medico=" + medico.getApellido() + super.toString()+
-                '}';
+                '}'+"\n";
     }
 }

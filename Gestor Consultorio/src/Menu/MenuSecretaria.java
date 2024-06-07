@@ -2,11 +2,13 @@ package Menu;
 
 import Medico.GestorMedico;
 import Medico.Medico;
+import Usuario.USecretaria;
 import Modelo.Direccion;
 import Modelo.Especialidad;
 import Paciente.GestorPaciente;
 import Paciente.Paciente;
 import Secretaria.GestorSecretaria;
+import Secretaria.Secretaria;
 import Turno.Turno;
 import Usuario.GestorUsuario;
 import Usuario.Usuario;
@@ -71,14 +73,93 @@ public class MenuSecretaria extends Menu{
         } while (opc != 0);
     }
 
-    @Override
-    public void menuADMIN() {
-        super.menuADMIN();
+    public void menuADMINsecretaria() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        String menu = "\n \t1- Crear Secretaria\n\t2-Eliminar Secretaria \n\t 3-Mostrar todos\n\t0- Salir al menu principal\n";
+        int opc;
+        do {
+            System.out.println(menu);
+
+            opc = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opc) {
+                case 0:
+                    System.out.println("Saliendo al menu principal");
+                    break;
+                case 1:
+                    crearUsuario();
+                    break;
+                case 2:
+                    Secretaria aux=buscarSecretaria();
+                    boolean rta=secretarias.eliminar(aux);
+                    if(rta){
+                        System.out.println("Secretaria eliminada correctamente.");
+                    }
+                    break;
+                case 3:
+                    System.out.println(secretarias.mostrarSecretarias());;
+                    break;
+                default:
+                    System.out.println("Ingrese una opcion valida");
+            }
+        } while (opc != 0);
     }
 
     @Override
     public Usuario inicioSesion() {
         return super.inicioSesion();
+    }
+
+    public void crearUsuario(){
+        Secretaria secretaria=crearSecretaria();
+        boolean flag=true;
+        String user="";
+        while (flag){
+            System.out.println("Ingrese userName: ");
+            user=scanner.next();
+            scanner.nextLine();
+            boolean rta2=usuarios.buscarUserName(user);
+            if (!rta2){
+                flag=false;
+            }else {
+                System.out.println("Ese userName ya existe. Intente nuevamente");
+            }
+        }
+        System.out.println("Ingrese contraseña: ");
+        String contraseña=scanner.next();
+        scanner.nextLine();
+        System.out.println(usuarios.agregarUsuario(new USecretaria(user,contraseña,secretaria)));
+    }
+
+    public Secretaria crearSecretaria(){
+        System.out.println("Ingrese D.N.I: ");
+        int dni = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Ingrese Nombre: ");
+        String nombre=scanner.nextLine();
+        System.out.println("Ingrese Apellido: ");
+        String apellido=scanner.nextLine();
+        System.out.println("Ingrese fecha de nacimiento.\nDia:  ");
+        int dia=scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Mes:");
+        int mes=scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Año:  ");
+        int año=scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Ingrese Calle: ");
+        String calle=scanner.nextLine();
+        System.out.println("Ingrese Numero: ");
+        int nro=scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Ingrese Ciudad: ");
+        String ciudad=scanner.nextLine();
+        Secretaria secre=new Secretaria(nombre,apellido,LocalDate.of(año,mes,dia),dni,new Direccion(calle,nro,ciudad));
+        secretarias.agregarSecretaria(secre);
+        return secre;
     }
 
     public void crearPaciente() {
@@ -277,6 +358,41 @@ public class MenuSecretaria extends Menu{
         paciente.agregarTurno(turno);
         System.out.println(turno);
 
+    }
+
+    public Secretaria buscarSecretaria() {
+        int dni = 0;
+        Secretaria secretaria=new Secretaria();
+        System.out.println("Secretarias Disponibles:");
+        int i = 1;
+        boolean rta = false;
+        int flag = 0;
+        Iterator<Secretaria> iterator = secretarias.getListadoSecretarias().iterator();
+        while (iterator.hasNext()) {
+                Secretaria aux = iterator.next();
+                System.out.println(i + ") " + aux.getApellido() + "     " + aux.getDni());
+                i++;
+        }
+        int opcion = 0;
+        while (flag == 0){
+        System.out.print("Ingrese el dni de la secreteria: ");
+        opcion = scanner.nextInt();
+        scanner.nextLine();
+        if (secretarias.validarSecretaria(opcion)) {
+            secretaria = secretarias.buscar(opcion);
+            System.out.println("Su eleccion es " + secretaria.getApellido() + " " + secretaria.getNombre());
+            System.out.println("Desea continuar? 1. Si      2. Volver a ingresar Matricula");
+            i = scanner.nextInt();
+            scanner.nextLine();
+            if (i == 1) {
+                flag = 1;
+            }
+        }
+        if (flag != 1) {
+            System.out.println("Intente nuevamente. ");
+        }
+    }
+            return secretaria;
     }
 
     public Paciente verificarDNI(){

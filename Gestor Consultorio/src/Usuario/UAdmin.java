@@ -19,6 +19,6 @@ public class UAdmin extends Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "UAdmin{}";
+        return "UAdmin{}"+"\n";
     }
 }

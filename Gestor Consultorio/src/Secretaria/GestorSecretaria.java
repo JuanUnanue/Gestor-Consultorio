@@ -18,6 +18,11 @@ public class GestorSecretaria extends GestorInformacion {
     public GestorSecretaria() {
         listadoSecretarias=new HashSet<>();
     }
+
+    public HashSet<Secretaria> getListadoSecretarias() {
+        return listadoSecretarias;
+    }
+
     ///
     public void agregarSecretaria(Secretaria secretaria){
         listadoSecretarias.add(secretaria);
@@ -29,6 +34,17 @@ public class GestorSecretaria extends GestorInformacion {
             Secretaria aux=iterator.next();
             if(aux.getDni()==dni){
                 rta=aux;
+            }
+        }
+        return rta;
+    }
+    public boolean validarSecretaria(int dni){
+        Iterator<Secretaria>iterator=listadoSecretarias.iterator();
+        boolean rta=false;
+        while (iterator.hasNext()){
+            Secretaria aux=iterator.next();
+            if(aux.getDni()==dni){
+                rta=true;
             }
         }
         return rta;
@@ -96,11 +112,37 @@ public class GestorSecretaria extends GestorInformacion {
 
         }
     }
-    public void mostrarSecretarias(){
+    public String mostrarSecretarias(){
         Iterator<Secretaria>iterator= listadoSecretarias.iterator();
+        String rta="";
         while (iterator.hasNext()){
             Secretaria aux=iterator.next();
-            System.out.println(aux.toString());
+           rta+= aux.toString();
         }
+        return rta;
+    }
+    public Secretaria buscar(int dni){
+        Iterator<Secretaria>iterator=listadoSecretarias.iterator();
+        Secretaria rta=new Secretaria();
+        while (iterator.hasNext()){
+            Secretaria aux=iterator.next();
+            if(aux.getDni()==dni){
+                rta=aux;
+            }
+        }
+        return rta;
+    }
+    public boolean eliminar(Object obj) {
+        Secretaria secre=(Secretaria) obj;
+        Iterator<Secretaria>iterator=listadoSecretarias.iterator();
+        boolean flag=false;
+        while (iterator.hasNext()){
+            Secretaria aux=iterator.next();
+            if(aux.equals(secre)){
+                iterator.remove();
+                flag=true;
+            }
+        }
+        return flag;
     }
 }

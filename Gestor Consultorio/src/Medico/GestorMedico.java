@@ -4,6 +4,7 @@ import Modelo.Direccion;
 import Modelo.Especialidad;
 import Modelo.GestorInformacion;
 import Modelo.Json;
+import Secretaria.Secretaria;
 import Turno.Turno;
 import org.json.JSONArray;
 
@@ -60,6 +61,7 @@ public class GestorMedico extends GestorInformacion {
         }
         return rta;
     }
+
     public Medico buscarMedico(int matricula){   //Devuelve el medico
         Medico rta=new Medico();
         Iterator<Map.Entry<Especialidad,HashSet<Medico>>> entryIterator=listadoMedicos.entrySet().iterator();
@@ -76,6 +78,7 @@ public class GestorMedico extends GestorInformacion {
         }
         return rta;
     }
+
     public String mostrarMedicos(){
         String rta="";
         Iterator<Map.Entry<Especialidad,HashSet<Medico>>> entryIterator=listadoMedicos.entrySet().iterator();
@@ -152,6 +155,7 @@ public class GestorMedico extends GestorInformacion {
             exception.printStackTrace();
         }
     }
+
     public void leerListado(){
         try {
             JSONObject object  = new JSONObject(Json.leer("medicos"));
@@ -212,7 +216,24 @@ public class GestorMedico extends GestorInformacion {
     }
     ///
 
-
+    public boolean eliminar(Object obj) {
+        Medico medico=(Medico) obj;
+        Iterator<Map.Entry<Especialidad,HashSet<Medico>>>entryIterator=listadoMedicos.entrySet().iterator();
+        boolean flag=false;
+        while (entryIterator.hasNext()){
+            Map.Entry<Especialidad,HashSet<Medico>>entry=entryIterator.next();
+            HashSet<Medico>medicoHashSet=entry.getValue();
+            Iterator<Medico>iterator=medicoHashSet.iterator();
+            while (iterator.hasNext()){
+                Medico aux=iterator.next();
+                if(aux.equals(medico)){
+                    iterator.remove();
+                    flag=true;
+                }
+            }
+        }
+        return flag;
+    }
 
 
 }

@@ -57,6 +57,6 @@ public class Paciente extends Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Paciente{ " + super.getNombre()+" "+super.getApellido()+" "+", dni= "+super.getDni()+" "+",histoia clinica= "+historiaClinica + "\n"+historialTurnos+"  }";
+        return "Paciente{ " + super.getNombre()+" "+super.getApellido()+" "+", dni= "+super.getDni()+" "+",histoia clinica= "+historiaClinica + "\n"+"  }";
     }
 }

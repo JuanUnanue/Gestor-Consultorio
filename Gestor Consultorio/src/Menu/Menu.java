@@ -52,7 +52,7 @@ public class Menu {
     public void menuPrincipal() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t4-Mostrar todos los medicos \n\t5-Mostrar todos los pacientes \n\t6-Mostrar todas las secretarias \n\t0- Finalizar Programa\n";
+        String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t0- Finalizar Programa\n";
         int opc;
         this.pacientes.leerListado();
         this.medicos.leerListado();
@@ -78,23 +78,18 @@ public class Menu {
                        UPaciente paciente=(UPaciente) user;
                        menuPaciente.menuPrincipal(paciente);
                    }else if (user instanceof UAdmin){
-                       System.out.println("que sera este user jaja");
-                       menuMedico.menuADMINMedicos();
+                       menuADMIN(menuPaciente,menuSecretaria,menuMedico);
                    }else if(user instanceof USecretaria){
                        menuSecretaria.menuPrincipal();
                    } else if (user instanceof UMedico) {
                        menuMedico.menuPrincipal(((UMedico) user).getMedico());
                    }
-
                     break;
                 case 2:
                     menuPaciente.crearUsuario();
                     break;
                 case 3:
                     usuarios.mostrarUsuarios();
-                    break;
-                case 4:
-                    System.out.println(medicos.mostrarMedicos());
                     break;
                 case 5:
                     pacientes.mostrarPacientes();
@@ -110,11 +105,13 @@ public class Menu {
         pacientes.guardarListado();
         medicos.guardarListado();
         presentesPacientes.guardarPresentes(presentes);
+        secretarias.guardarListado();
         scanner.close();
     }
-    public void menuADMIN() {
 
-        String menu = "\n \t1- Pacientes\n\t2-Medicos \n\t 3-Secretarias\n\t\n\t0- Salir al menu principal\n";
+    public void menuADMIN(MenuPaciente menuPaciente,MenuSecretaria menuSecretaria,MenuMedico menuMedico) {
+        System.out.println("\t<--- MENU ADMIN --->");
+        String menu = "\n \t1- Pacientes\n\t2-Medicos \n\t3-Secretarias\n\t4-Usuarios\n\t0- Salir al menu principal\n";
         int opc;
         do {
             System.out.println(menu);
@@ -125,13 +122,16 @@ public class Menu {
                     System.out.println("Saliendo del menu ADMIN");
                     break;
                 case 1:
-
+                    menuPaciente.menuADMINPacientes();
                     break;
                 case 2:
-
+                    menuMedico.menuADMINMedicos();
                     break;
                 case 3:
-
+                    menuSecretaria.menuADMINsecretaria();
+                    break;
+                case 4:
+                    menuPaciente.menuADMINusuarios();
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");
@@ -163,9 +163,6 @@ public class Menu {
         return aux;
     }
     ///
-    public void crearUsuario(){
-
-    }
     ///
     public DayOfWeek seleccionDiaDisponible(Agenda agenda){
         Iterator<Map.Entry<DayOfWeek, HashSet<Turno>>> entryIterator=agenda.getTurnos().entrySet().iterator();

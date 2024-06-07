@@ -66,7 +66,7 @@ public class MenuMedico extends Menu{
 
     }
 
-    @Override
+
     public void crearUsuario() {
 
     }
@@ -75,7 +75,7 @@ public class MenuMedico extends Menu{
         System.out.print("\033[H\033[2J");
         System.out.flush();
         int matricula=0;
-        String menu = "\n \t1- Crear Medicos\n\t2-Inicializar Turnos \n\t 3-Generar Usuario para medico\n\t0- Salir al menu principal.\n";
+        String menu = "\n \t1- Crear Medicos\n\t2-Inicializar Turnos \n\t 3-Generar Usuario para medico\n\t4-Eliminar Medico\n\t5-Mostrar todos\n\t0- Salir al menu principal.\n";
         int opc;
         Medico medico=new Medico();
         do {
@@ -97,12 +97,16 @@ public class MenuMedico extends Menu{
                     inicializadorTurnos(medico);
                     break;
                 case 3:
-
                     generarUsuario(mostrarYelegirMatricula());
                     break;
                 case 4:
-                    usuarios.borrarUsuariosMedicos();
-                    System.out.println("Lito");
+                    medico=medicos.buscarMedico(mostrarYelegirMatricula());
+                    boolean rta=medicos.eliminar(medico);
+                    if(rta){
+                    System.out.println("Medico eliminado.");}
+                    break;
+                case 5:
+                    System.out.println(medicos.mostrarMedicos());
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");
@@ -314,6 +318,7 @@ public class MenuMedico extends Menu{
         cargarHistoriaClinica(medico,pacientes.get(opcion-1));
         eliminarPresente(medico.getApellido(),pacientes.get(opcion-1));
     }
+
     public void cargarHistoriaClinica(Medico medico,Paciente paciente){
         HashMap<Especialidad,String>historia=paciente.getHistoriaClinica();
         String string="";
@@ -326,6 +331,7 @@ public class MenuMedico extends Menu{
         System.out.println("terminando consulta.");
         historia.put(medico.getEspecialidad(),string);
     }
+
     public void buscarPaciente(){
         int dni=0;
         boolean rta=false;
@@ -350,6 +356,7 @@ public class MenuMedico extends Menu{
             }
         }
     }
+
     public void verHistoriaClinica(HashMap<Especialidad,String> historiaClinica){
         Iterator<Map.Entry<Especialidad,String>>entryIterator=historiaClinica.entrySet().iterator();
         ArrayList<Especialidad>especialidades=new ArrayList<>();

@@ -2,6 +2,7 @@ package Menu;
 import Medico.Medico;
 import Modelo.Especialidad;
 import Secretaria.GestorSecretaria;
+import Secretaria.Secretaria;
 import Turno.Turno;
 import Usuario.UPaciente;
 import Medico.GestorMedico;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import Medico.Agenda;
+import Usuario.Usuario;
+
 public class MenuPaciente extends Menu{
     private Scanner scanner;
     private GestorUsuario usuarios;
@@ -76,7 +79,7 @@ public class MenuPaciente extends Menu{
     public void menuADMINPacientes() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
-        String menu = "\n \t1- Crear Paciente\n\t2-Mostrar Pacientes \n\t 3-Turnos\n\t8-Mostrar Todos\n\t0- Salir al menu principal\n";
+        String menu = "\n \t1- Crear Paciente\n\t2-Eliminar Paciente \n\t 3-Mostrar Todos\n\t0- Salir al menu principal\n";
         int opc;
         do {
             System.out.println(menu);
@@ -91,18 +94,51 @@ public class MenuPaciente extends Menu{
                 case 1:
                     crearUsuario();
                     break;
-                case 3:
-
+                case 2:
+                    Paciente aux=buscarElegirPaciente();
+                    boolean rta=pacientes.eliminar(aux);
+                    if(rta){
+                        System.out.println("Paciente eliminado correctamente.");
+                    }
                     break;
-                case 8:
-                    pacientes.mostrarPacientes();
+                case 3:
+                    System.out.println(pacientes.mostrarPacientes());
                     break;
                 default:
                     System.out.println("Ingrese una opcion valida");
             }
         } while (opc != 0);
     }
+    public void menuADMINusuarios() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+        String menu = "\n \t1- Eliminar usuario\n\t2- Mostrar Todos\n\t0- Salir al menu principal\n";
+        int opc;
+        do {
+            System.out.println(menu);
 
+            opc = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opc) {
+                case 0:
+                    System.out.println("Saliendo al menu principal");
+                    break;
+                case 1:
+                    Usuario aux=buscarElegirUsuario();
+                    boolean rta=usuarios.eliminar(aux);
+                    if(rta){
+                        System.out.println("Paciente eliminado correctamente.");
+                    }
+                    break;
+                case 2:
+                    System.out.println(usuarios.mostrarUsuarios());
+                    break;
+                default:
+                    System.out.println("Ingrese una opcion valida");
+            }
+        } while (opc != 0);
+    }
     public Paciente crearPaciente(int dni){
         System.out.println("Ingrese Nombre: ");
         String nombre=scanner.nextLine();
@@ -160,6 +196,7 @@ public class MenuPaciente extends Menu{
         scanner.nextLine();
         System.out.println(usuarios.agregarUsuario(new UPaciente(user,contraseña,paciente)));
     }
+
     public Especialidad mostrarYelegirEspecialidad(){
         System.out.println("Seleccione una especialidad:");
         Especialidad especialidadElegida = null;
@@ -247,6 +284,7 @@ public class MenuPaciente extends Menu{
         System.out.println(turno);
 
     }
+
     public HashMap<LocalDate, HashSet<Turno>> obtenerTurnosDisponibles(HashSet<Turno> turnosDispo) {
         HashMap<LocalDate, HashSet<Turno>> entryMap = new HashMap<>();
         for (Turno turno : turnosDispo) {
@@ -325,6 +363,7 @@ public class MenuPaciente extends Menu{
         }while (opcion < 1 || opcion > turnos.size());
         return turnos.get(opcion-1);
     }
+
     public void verHistoriaClinica(HashMap<Especialidad,String> historiaClinica){
         Iterator<Map.Entry<Especialidad,String>>entryIterator=historiaClinica.entrySet().iterator();
         ArrayList<Especialidad>especialidades=new ArrayList<>();
@@ -350,4 +389,61 @@ public class MenuPaciente extends Menu{
     public void agregarPresente(String apellidoMedico, Paciente paciente) {
         super.agregarPresente(apellidoMedico, paciente);
     }
+
+    public Paciente buscarElegirPaciente() {
+        int dni = 0;
+        Paciente paciente=new Paciente();
+        System.out.println("Pacientes Disponibles:");
+        int i = 1;
+        boolean rta = false;
+        int flag = 0;
+        Iterator<Paciente> iterator = pacientes.getListadoPacientes().iterator();
+        while (iterator.hasNext()) {
+            Paciente aux = iterator.next();
+            System.out.println(i + ") " + aux.getApellido() + "     " + aux.getDni());
+            i++;
+        }
+        int opcion = 0;
+        while (flag == 0){
+            System.out.print("Ingrese el dni del paciente: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            if (pacientes.buscarDNI(opcion)) {
+                paciente = pacientes.buscarPaciente(opcion);
+                System.out.println("Su eleccion es " +paciente.getApellido() + " " + paciente.getNombre());
+                System.out.println("Desea continuar? 1. Si      2. Volver a ingresar Matricula");
+                i = scanner.nextInt();
+                scanner.nextLine();
+                if (i == 1) {
+                    flag = 1;
+                }
+            }
+            if (flag != 1) {
+                System.out.println("Intente nuevamente. ");
+            }
+        }
+        return paciente;
+    }
+
+    public Usuario buscarElegirUsuario() {
+        int dni = 0;
+        ArrayList<Usuario>arrayList=new ArrayList<>(usuarios.getListadoUsuarios());
+        System.out.println("Usuarios Disponibles:");
+        Usuario user=new Usuario();
+        for(int i=0;i<arrayList.size();i++){
+            System.out.println(i+1 + ") " + arrayList.get(i).getUsername());
+        }
+        System.out.print("Ingrese el número correspondiente al username deseado: ");
+        int opcion = scanner.nextInt();
+        scanner.nextLine();
+
+        if (opcion >= 1 && opcion <= arrayList.size()) {
+            user=arrayList.get(opcion-1);
+            System.out.println("Usuario seleccionado: " + arrayList.get(opcion-1).getUsername());
+        } else {
+            System.out.println("Opción inválida. Por favor, ingrese un número válido.");
+        }
+        return user;
+    }
+
 }

@@ -17,6 +17,11 @@ public class GestorPaciente extends GestorInformacion {
         this.listadoPacientes.add(paciente);
         return "Se creo el paciente correctamente!";
     }
+
+    public HashSet<Paciente> getListadoPacientes() {
+        return listadoPacientes;
+    }
+
     public boolean buscarDNI(int DNI){   //Devuelve verdadero o falso dependiendo de si ya existe en el sistema
         Iterator<Paciente>iterator=listadoPacientes.iterator();
         boolean rta=false;
@@ -102,11 +107,26 @@ public class GestorPaciente extends GestorInformacion {
 
         }
     }
-    public void mostrarPacientes(){
+    public String mostrarPacientes(){
         Iterator<Paciente>iterator= listadoPacientes.iterator();
+        String rta="";
         while (iterator.hasNext()){
             Paciente aux=iterator.next();
-            System.out.println(aux.toString());
+            rta+=aux.toString();
         }
+        return rta;
+    }
+    public boolean eliminar(Object obj) {
+        Paciente aux=(Paciente) obj;
+        Iterator<Paciente>iterator=listadoPacientes.iterator();
+        boolean rta=false;
+        while (iterator.hasNext()){
+            Paciente paciente=iterator.next();
+            if(paciente.equals(aux)){
+                iterator.remove();
+                rta=true;
+            }
+        }
+        return rta;
     }
 }

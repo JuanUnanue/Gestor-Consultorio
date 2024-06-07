@@ -17,6 +17,6 @@ public class Secretaria extends Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Secretaria{"+ super.getApellido()+ " "+ super.getNombre()+ " "+super.getDni()+"}";
+        return "Secretaria{"+ super.getApellido()+ " "+ super.getNombre()+ " "+super.getDni()+"}\n";
     }
 }

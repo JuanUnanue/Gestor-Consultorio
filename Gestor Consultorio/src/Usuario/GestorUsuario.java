@@ -3,6 +3,7 @@ package Usuario;
 import Modelo.GestorInformacion;
 import Modelo.Json;
 import Paciente.GestorPaciente;
+import Paciente.Paciente;
 import Secretaria.GestorSecretaria;
 import Secretaria.Secretaria;
 import org.json.JSONArray;
@@ -21,12 +22,14 @@ public class GestorUsuario extends GestorInformacion {
     public HashSet<Usuario> getListadoUsuarios() {
         return listadoUsuarios;
     }
-    public void mostrarUsuarios(){
+    public String mostrarUsuarios(){
         Iterator<Usuario>iterator= listadoUsuarios.iterator();
+        String rta=" ";
         while (iterator.hasNext()){
             Usuario aux=iterator.next();
-            System.out.println(aux.toString());
+            rta+=aux.toString();
         }
+        return rta;
     }
     public String agregarUsuario(Usuario user){
         listadoUsuarios.add(user);
@@ -70,6 +73,7 @@ public class GestorUsuario extends GestorInformacion {
             e.printStackTrace();
         }
     }
+
     public void guardarListado(){
         JSONArray jsonArray = new JSONArray();
         try {
@@ -112,7 +116,7 @@ public class GestorUsuario extends GestorInformacion {
         return rta;
     }
 
-    public boolean buscarUserName(String user) //Devuele true si existe usuario en el sistema
+    public boolean buscarUserName(String user) //Devuele true si existe user en el sistema
     {
         Iterator<Usuario>iterator= listadoUsuarios.iterator();
         boolean rta=false;
@@ -157,14 +161,29 @@ public class GestorUsuario extends GestorInformacion {
             }
         }
     }
-    public void eliminarUPacientes(){
+    public void eliminarUSecretaria(){
         Iterator<Usuario> iterator = listadoUsuarios.iterator();
         while (iterator.hasNext()) {
             Usuario usuario = iterator.next();
-            if (usuario instanceof UPaciente) {
+            if (usuario instanceof USecretaria) {
                 iterator.remove();
             }
         }
+    }
+
+    @Override
+    public boolean eliminar(Object obj) {
+        Usuario aux=(Usuario) obj;
+        Iterator<Usuario>iterator=listadoUsuarios.iterator();
+        boolean rta=false;
+        while (iterator.hasNext()){
+            Usuario usuario=iterator.next();
+            if(usuario.equals(aux)){
+                iterator.remove();
+                rta=true;
+            }
+        }
+        return rta;
     }
 
     @Override

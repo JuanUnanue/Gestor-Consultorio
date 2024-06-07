@@ -24,6 +24,6 @@ public class USecretaria extends Usuario implements Serializable {
     public String toString() {
         return "USecretaria{" + super.toString()+
                 "secretaria=" + secretaria +
-                '}';
+                '}'+"\n";
     }
 }

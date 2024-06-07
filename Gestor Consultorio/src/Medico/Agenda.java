@@ -55,9 +55,7 @@ public class Agenda implements Serializable,IGestorTurno {
     }
     public void generadorTurnosDisponibles(DayOfWeek diaSemana,LocalDateTime diaInicio, LocalTime horaInicio, LocalTime horaFinal,Object object){
         HashSet<Turno>turnosDispo=inicializarTurnosDisponibles(diaSemana,diaInicio,horaInicio,horaFinal,object);
-
         turnos.put(diaSemana,turnosDispo);
-
     }
     @Override
     public void inicializarDiaSemana(DayOfWeek diaSemana){

@@ -28,6 +28,7 @@ public class GestorMedico extends GestorInformacion {
     public GestorMedico(HashSet<Medico> listadoMedicos) {
         this.listadoMedicos=new HashMap<>();
     }
+
     public String agregarMedico(Medico medico) {
         HashSet<Medico> listado;
         if (listadoMedicos.containsKey(medico.getEspecialidad())) {

@@ -1,25 +1,18 @@
 package Usuario;
 
-import Medico.Medico;
-import Modelo.Direccion;
-import Modelo.Especialidad;
+import Modelo.GestorInformacion;
 import Modelo.Json;
 import Paciente.GestorPaciente;
 import Secretaria.GestorSecretaria;
 import Secretaria.Secretaria;
-import Turno.Turno;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import Medico.GestorMedico;
-import java.io.*;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 import java.util.*;
 
-public class GestorUsuario {
+public class GestorUsuario extends GestorInformacion {
     private HashSet<Usuario> listadoUsuarios;
     //
     public GestorUsuario() {
@@ -77,7 +70,7 @@ public class GestorUsuario {
             e.printStackTrace();
         }
     }
-    public void guardarUsuarios(){
+    public void guardarListado(){
         JSONArray jsonArray = new JSONArray();
         try {
             Iterator<Usuario> iterator = listadoUsuarios.iterator();
@@ -172,5 +165,10 @@ public class GestorUsuario {
                 iterator.remove();
             }
         }
+    }
+
+    @Override
+    public void leerListado() {
+
     }
 }

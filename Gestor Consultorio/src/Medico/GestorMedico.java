@@ -2,6 +2,7 @@ package Medico;
 
 import Modelo.Direccion;
 import Modelo.Especialidad;
+import Modelo.GestorInformacion;
 import Modelo.Json;
 import Turno.Turno;
 import org.json.JSONArray;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class GestorMedico {
+public class GestorMedico extends GestorInformacion {
     HashMap<Especialidad,HashSet<Medico>>listadoMedicos;
     //
 

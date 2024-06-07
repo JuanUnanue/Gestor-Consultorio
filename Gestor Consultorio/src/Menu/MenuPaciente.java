@@ -43,7 +43,7 @@ public class MenuPaciente extends Menu{
         System.out.print("\033[H\033[2J");
         System.out.flush();
         setUser(paciente);
-        String menu = "\n \t1- Turnos\n\t2-Historia Clinica\n\t3-\n\t8-Mostrar Todos\n\t0- Salir al menu principal\n";
+        String menu = "\n \t1- Sacar un turno\n\t2-Historia Clinica\n\t3-Ver Turnos\n\t8-Mostrar Todos\n\t0- Salir al menu principal\n";
         int opc;
         do {
             System.out.println(menu);
@@ -61,7 +61,7 @@ public class MenuPaciente extends Menu{
                     verHistoriaClinica(user.getPaciente().getHistoriaClinica());
                     break;
                 case 3:
-
+                    System.out.println(user.getPaciente().getHistorialTurnos());
                     break;
                 case 8:
                     pacientes.mostrarPacientes();

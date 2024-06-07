@@ -1,10 +1,12 @@
 package Paciente;
 
+import Modelo.GestorInformacion;
+
 import java.io.*;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class GestorPaciente{
+public class GestorPaciente extends GestorInformacion {
     private final String ARCHIVO_PACIENTE="Pacientes.bin";
     private HashSet<Paciente>listadoPacientes;
     //
@@ -37,7 +39,7 @@ public class GestorPaciente{
         }
         return rta;
     }
-    public void leerPaciente() {
+    public void leerListado() {
         ObjectInputStream objectInputStream = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(ARCHIVO_PACIENTE);
@@ -67,7 +69,7 @@ public class GestorPaciente{
             }
         }
     }
-    public void guardarPacientes(){
+    public void guardarListado(){
         ObjectOutputStream objectOutputStream=null;
         Iterator<Paciente> iterator = listadoPacientes.iterator();
         try{

@@ -1,12 +1,13 @@
 package Secretaria;
 
+import Modelo.GestorInformacion;
 import Paciente.Paciente;
 
 import java.io.*;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class GestorSecretaria {
+public class GestorSecretaria extends GestorInformacion {
     private final String ARCHIVO_SECRETARIA="Secretarias.bin";
     private HashSet<Secretaria> listadoSecretarias;
 

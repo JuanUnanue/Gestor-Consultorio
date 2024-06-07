@@ -54,7 +54,7 @@ public class Menu {
         System.out.flush();
         String menu = "\n \t1- Iniciar Sesion\n\t2- Registrarse\n\t 3-Mostrar todos users \n\t4-Mostrar todos los medicos \n\t5-Mostrar todos los pacientes \n\t6-Mostrar todas las secretarias \n\t0- Finalizar Programa\n";
         int opc;
-        this.pacientes.leerPaciente();
+        this.pacientes.leerListado();
         this.medicos.leerListado();
         this.secretarias.leerListado();
         this.usuarios.leerUsuarios(pacientes,medicos,secretarias);
@@ -106,8 +106,8 @@ public class Menu {
                     System.out.println("Ingrese una opcion valida");
             }
         } while (opc != 0);
-        usuarios.guardarUsuarios();
-        pacientes.guardarPacientes();
+        usuarios.guardarListado();
+        pacientes.guardarListado();
         medicos.guardarListado();
         presentesPacientes.guardarPresentes(presentes);
         scanner.close();

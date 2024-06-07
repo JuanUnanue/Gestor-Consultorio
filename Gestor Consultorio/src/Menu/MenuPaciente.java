@@ -43,7 +43,7 @@ public class MenuPaciente extends Menu{
         System.out.print("\033[H\033[2J");
         System.out.flush();
         setUser(paciente);
-        String menu = "\n \t1- Turnos\n\t2- \n\t 3-\n\t8-Mostrar Todos\n\t0- Salir al menu principal\n";
+        String menu = "\n \t1- Turnos\n\t2-Historia Clinica\n\t3-\n\t8-Mostrar Todos\n\t0- Salir al menu principal\n";
         int opc;
         do {
             System.out.println(menu);
@@ -56,6 +56,9 @@ public class MenuPaciente extends Menu{
                     break;
                 case 1:
                     sacarTurno(user.getPaciente());
+                    break;
+                case 2:
+                    verHistoriaClinica(user.getPaciente().getHistoriaClinica());
                     break;
                 case 3:
 
@@ -322,7 +325,27 @@ public class MenuPaciente extends Menu{
         }while (opcion < 1 || opcion > turnos.size());
         return turnos.get(opcion-1);
     }
-
+    public void verHistoriaClinica(HashMap<Especialidad,String> historiaClinica){
+        Iterator<Map.Entry<Especialidad,String>>entryIterator=historiaClinica.entrySet().iterator();
+        ArrayList<Especialidad>especialidades=new ArrayList<>();
+        while (entryIterator.hasNext()){
+            Map.Entry<Especialidad,String>entry=entryIterator.next();
+            especialidades.add((entry.getKey()));
+        }
+        for(int i=0;i< especialidades.size();i++){
+            System.out.println((i+1+". "+especialidades.get(i)));
+        }
+        int opcion=0;
+        do{
+            System.out.print("Ingrese la especialidad: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+            if (opcion < 1 || opcion > especialidades.size()) {
+                System.out.println("Opción inválida. Intente nuevamente.");
+            }
+        }while (opcion < 1 || opcion > especialidades.size());
+        System.out.println(historiaClinica.get(especialidades.get(opcion-1)));
+    }
     @Override
     public void agregarPresente(String apellidoMedico, Paciente paciente) {
         super.agregarPresente(apellidoMedico, paciente);

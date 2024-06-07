@@ -25,6 +25,11 @@ public class Paciente extends Persona implements Serializable {
         this.historialTurnos=new ArrayList<>();
 
     }
+
+    public ArrayList<Turno> getHistorialTurnos() {
+        return historialTurnos;
+    }
+
     public void agregarTurno(Turno turno){
         this.historialTurnos.add(turno);
     }
@@ -52,6 +57,6 @@ public class Paciente extends Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Paciente{ " + super.getNombre()+" "+super.getApellido()+" "+", dni= "+super.getDni()+" "+",histoia clinica= "+historiaClinica +" }";
+        return "Paciente{ " + super.getNombre()+" "+super.getApellido()+" "+", dni= "+super.getDni()+" "+",histoia clinica= "+historiaClinica + "\n"+historialTurnos+"  }";
     }
 }

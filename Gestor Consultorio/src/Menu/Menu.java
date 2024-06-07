@@ -2,6 +2,7 @@ package Menu;
 
 import Medico.Agenda;
 import Medico.GestorMedico;
+import Modelo.GestorPacientePresente;
 import Paciente.GestorPaciente;
 import Paciente.Paciente;
 import Secretaria.GestorSecretaria;
@@ -57,6 +58,8 @@ public class Menu {
         this.medicos.leerListado();
         this.secretarias.leerListado();
         this.usuarios.leerUsuarios(pacientes,medicos,secretarias);
+        GestorPacientePresente presentesPacientes=new GestorPacientePresente();
+        this.presentes=presentesPacientes.leerPresentes();
         MenuMedico menuMedico=new MenuMedico(scanner,usuarios,pacientes,medicos,presentes);
         MenuPaciente menuPaciente=new MenuPaciente(scanner,usuarios,pacientes,medicos,secretarias,presentes);
         MenuSecretaria menuSecretaria=new MenuSecretaria(scanner,usuarios,pacientes,medicos,secretarias,presentes);
@@ -106,6 +109,7 @@ public class Menu {
         usuarios.guardarUsuarios();
         pacientes.guardarPacientes();
         medicos.guardarListado();
+        presentesPacientes.guardarPresentes(presentes);
         scanner.close();
     }
     public void menuADMIN() {
